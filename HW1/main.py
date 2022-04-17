@@ -2,20 +2,10 @@ from typing import Tuple
 from parsi_io.modules.number_extractor import NumberExtractor
 from pprint import pprint as print
 from dataclasses import dataclass
-from typing import Tuple, List
+from typing import Tuple, List, Set
 import re
 
 extractor = NumberExtractor()
-
-
-@dataclass
-class Output:
-    quiantity: str
-    amount: int
-    unit: str
-    item: str
-    marker: str
-    span: Tuple[int, int]
 
 
 units = ["متر بر ثانیه", "گرم"]
@@ -60,32 +50,72 @@ def normalize_units(matn: str) -> str:
 
 
 @dataclass
-class ES:
+class RawOutput:
     amount: Tuple[int, int]
     unit: Tuple[int, int]
     item: Tuple[int, int]
+    span: Tuple[int, int]
 
     def __repr__(self):
-        return f"{self.amount}|{self.unit}|{self.item}"
-    
-    def __eq__(self,other):
-        return self.amount==other.amount and self.unit==other.unit and self.item==other.item
-    
+        return f"{self.amount}|{self.unit}|{self.item}|{self.span}"
+
+    def __eq__(self, other):
+        return (
+            self.amount == other.amount
+            and self.unit == other.unit
+            and self.item == other.item
+            and self.span == other.span
+        )
+
     def __hash__(self):
-        return hash((self.amount,self.unit,self.item))
+        return hash((self.amount, self.unit, self.item, self.span))
 
 
-
-def extract_patterns(matn: str) -> List[ES]:
+def extract_patterns(matn: str) -> List[RawOutput]:
     results = set()
     for regex in pattern_regex:
         for match in regex.finditer(matn):
-            res = ES(
+            res = RawOutput(
                 amount=match.span(NUMBER_PATTERN_NAME),
                 unit=match.span(UNIT_PATTERN_NAME),
                 item=match.span(ITEM_PATTERN_NAME),
+                span=match.span(),
             )
             results.add(res)
+    return results
+
+
+@dataclass
+class Output:
+    quantity: str
+    amount: int
+    unit: str
+    item: str
+    marker: str
+    span: Tuple[int, int]
+
+
+def get_quantity_from_unit(unit: str) -> str:
+    # TODO
+    return "متر"
+
+
+def generate_output(matn: str, raw_output: Set[RawOutput]) -> List[Output]:
+    results = []
+    for raw in raw_oututs:
+        unit = matn[raw.unit[0] : raw.unit[1]]
+        amount = matn[raw.amount[0] : raw.amount[1]]
+        item = matn[raw.item[0] : raw.item[1]]
+        marker = matn[raw.span[0] : raw.span[1]]
+        o = Output(
+            quantity=get_quantity_from_unit(unit),
+            unit=unit,
+            amount=amount,
+            item=item,
+            span=raw.span,
+            marker=marker,
+        )
+        results.append(o)
     return results
 
 
@@ -95,4 +125,6 @@ matn_3 = normalize_units(matn_2)
 print(matn)
 print(matn_2)
 print(matn_3)
-print(extract_patterns(matn_3))
+raw_oututs = extract_patterns(matn_3)
+results = generate_output(matn, raw_oututs)
+print(results)
