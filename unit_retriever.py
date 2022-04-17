@@ -8,6 +8,24 @@ from hazm import Normalizer
 import pandas as pd
 
 
+'''
+TODO: convert
+
+request:
+fetch("https://www.bahesab.ir/cdn/unit/", {
+  "headers": {
+    "Referer": "https://www.bahesab.ir/calc/unit/",
+  },
+  "body": "string_o=%7B%22a%22%3A2%2C%22b%22%3A%22length%22%2C%22c%22%3A%22%D9%85%D8%AA%D8%B1(m)%22%2C%22d%22%3A%22%DA%A9%DB%8C%D9%84%D9%88%D9%85%D8%AA%D8%B1(km)%22%2C%22e%22%3A%221%22%7D",
+  "method": "POST"
+});
+
+body: string_o: {"a":2,"b":"unit.quantity.id","c":"source_unit.full_name","d":"target_unit.full_name","e":"1"}
+
+response: {"status":200,"v":"0.001"}
+
+'''
+
 @dataclass
 class Quantity:
     full_name: str
