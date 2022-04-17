@@ -1,4 +1,3 @@
-from pprint import pprint as print
 from typing import List, Set
 
 from parsi_io.modules.number_extractor import NumberExtractor
@@ -14,17 +13,19 @@ class UnitExtractor:
 
     def _normalize_numbers(self, matn: str) -> str:
         for num in self.num_extractor.run(matn):
-            for i in range(num["span"][0], num["span"][1]):
-                matn = matn[0:i] + NUMBER_TRASH_MAGIC + matn[i + 1:]
+            start = num["span"][0]
+            end = num["span"][1]
+            length = end-start
+            matn = matn[0:start]+NUMBER_TRASH_MAGIC*length+matn[end:]
         return matn
 
     def _normalize_units(self, matn: str) -> str:
         for match in unit_regex.finditer(matn):
             span = match.span()
-            matn = (
-                matn[: span[0]] + UNIT_TRASH_MAGIC *
-                (span[1] - span[0]) + matn[span[1]:]
-            )
+            start = span[0]
+            end = span[1]
+            length = end-start
+            matn = matn[: start] + UNIT_TRASH_MAGIC * length + matn[end:]
         return matn
 
     def _extract_patterns(self, matn: str) -> List[RawOutput]:
@@ -40,7 +41,9 @@ class UnitExtractor:
                 results.add(res)
         return results
 
-    def _generate_outputs(self, matn: str, raw_outputs: Set[RawOutput]) -> List[ValidOutput]:
+    def _generate_outputs(
+        self, matn: str, raw_outputs: Set[RawOutput]
+    ) -> List[ValidOutput]:
         results = []
         for raw in raw_outputs:
             unit = matn[raw.unit[0]: raw.unit[1]]
@@ -69,5 +72,3 @@ class UnitExtractor:
 def get_quantity_from_unit(unit: str) -> str:
     # TODO
     return "متر"
-
-
