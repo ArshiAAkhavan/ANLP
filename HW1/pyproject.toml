@@ -8,6 +8,10 @@ authors = ["ArshiAAkhavan <letmemakenewone@gmail.com>"]
 python = "^3.9"
 PyYAML = "^6.0"
 parstdex = "^1.1.4"
+pandas = "^1.4.2"
+hazm = "^0.7.0"
+bs4 = "^0.0.1"
+requests = "^2.27.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

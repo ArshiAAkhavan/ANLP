@@ -19,5 +19,3 @@ patterns = [
 
 pattern_regex = [re.compile(pattern) for pattern in patterns]
 
-units = ["متر بر ثانیه", "گرم"]
-unit_regex = re.compile(f'({"|".join(units)})')
