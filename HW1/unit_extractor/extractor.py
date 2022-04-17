@@ -2,15 +2,10 @@ import re
 from typing import List, Set
 
 from parsi_io.modules.number_extractor import NumberExtractor
-from unit_extractor.consts import (
-    ITEM_GROUP_NAME,
-    NUMBER_GROUP_NAME,
-    NUMBER_TRASH_MAGIC,
-    UNIT_GROUP_NAME,
-    UNIT_TRASH_MAGIC,
-    pattern_regex,
-    unit_overlap_regex,
-)
+from unit_extractor.consts import (ITEM_GROUP_NAME, NUMBER_GROUP_NAME,
+                                   NUMBER_TRASH_MAGIC, UNIT_GROUP_NAME,
+                                   UNIT_TRASH_MAGIC, pattern_regex,
+                                   unit_overlap_regex)
 from unit_extractor.output import RawOutput, ValidOutput
 from unit_retriever import UnitRetriever
 
@@ -65,10 +60,13 @@ class UnitExtractor:
     ) -> List[ValidOutput]:
         results = []
         for raw in raw_outputs:
-            unit = matn[raw.unit[0] : raw.unit[1]]
-            amount = matn[raw.amount[0] : raw.amount[1]]
-            item = matn[raw.item[0] : raw.item[1]]
-            marker = matn[raw.span[0] : raw.span[1]]
+            unit = matn[raw.unit[0]: raw.unit[1]]
+            item = matn[raw.item[0]: raw.item[1]]
+            marker = matn[raw.span[0]: raw.span[1]]
+
+            amount_raw = matn[raw.amount[0]: raw.amount[1]]
+            amount = self.num_extractor.run(amount_raw)[0]["value"]
+
             o = ValidOutput(
                 quantity=self.get_quantity_from_unit(unit),
                 unit=unit,

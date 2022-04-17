@@ -15,10 +15,11 @@ unit_regex = f"(?P<{UNIT_GROUP_NAME}>{UNIT_TRASH_MAGIC}+)"
 item_regex = f"(?P<{ITEM_GROUP_NAME}>[\u0600-\u06ff]+)"
 white_space_regex = r"(\s+)"
 
-pattern_map = {"N": num_regex, "U": unit_regex, "I": item_regex, " ": white_space_regex}
+pattern_map = {"N": num_regex, "U": unit_regex,
+               "I": item_regex, " ": white_space_regex}
 
 patterns_raw = ["N U I",
-        ]
+                ]
 
 
 patterns = []
@@ -29,5 +30,6 @@ for p in patterns_raw:
     patterns.append(pattern)
 
 
-unit_overlap_regex = re.compile(rf"({UNIT_TRASH_MAGIC}+)(\s+)(?:{UNIT_TRASH_MAGIC})")
+unit_overlap_regex = re.compile(
+    rf"({UNIT_TRASH_MAGIC}+)(\s+)(?:{UNIT_TRASH_MAGIC})")
 pattern_regex = [re.compile(pattern) for pattern in patterns]
