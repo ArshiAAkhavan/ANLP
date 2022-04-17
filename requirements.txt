@@ -1,0 +1,3 @@
+pandas
+hazm
+bs4
