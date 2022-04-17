@@ -1,0 +1,411 @@
+QuantityName,QuantityId,UnitFullName,Persian,English
+طول (Length),length,متر (m),متر ,m
+طول (Length),length,سانتیمتر (cm),سانتیمتر ,cm
+طول (Length),length,اینچ (inch),اینچ ,inch
+طول (Length),length,میلیمتر (mm),میلیمتر ,mm
+طول (Length),length,فوت (پا-فیت-foot-feet),فوت ,پا-فیت-foot-feet
+طول (Length),length,کیلومتر (km),کیلومتر ,km
+طول (Length),length,مایل (mile),مایل ,mile
+طول (Length),length,یارد (yard),یارد ,yard
+طول (Length),length,مایلدریایی (nauticalmile),مایلدریایی ,nauticalmile
+طول (Length),length,دسیمتر (dm),دسیمتر ,dm
+طول (Length),length,میکرون (micron),میکرون ,micron
+طول (Length),length,میکرومتر (μm),میکرومتر ,μm
+طول (Length),length,نانومتر (nm),نانومتر ,nm
+طول (Length),length,آنگستروم (Angstrom),آنگستروم ,Angstrom
+طول (Length),length,پیکومتر (pm),پیکومتر ,pm
+طول (Length),length,فمتومتر,فمتومتر,
+طول (Length),length,ذرع,ذرع,
+طول (Length),length,گز,گز,
+طول (Length),length,وجب,وجب,
+طول (Length),length,فرسنگ (فرسخ),فرسنگ ,فرسخ
+طول (Length),length,فرسنگشرعی (فرسخشرعی),فرسنگشرعی ,فرسخشرعی
+طول (Length),length,فاتوم (ftm),فاتوم ,ftm
+طول (Length),length,زنجیر (chain),زنجیر ,chain
+طول (Length),length,فرلانگ (fur),فرلانگ ,fur
+طول (Length),length,میل (ثو),میل ,ثو
+طول (Length),length,xu,xu,
+طول (Length),length,سالنوری (lightyear),سالنوری ,lightyear
+طول (Length),length,ثانیهنوری (lightsecond),ثانیهنوری ,lightsecond
+طول (Length),length,واحدنجومی (au),واحدنجومی ,au
+طول (Length),length,پارسک (pc),پارسک ,pc
+طول (Length),length,شعاعخورشیدی (solarradius),شعاعخورشیدی ,solarradius
+وزن (Weight),Weight,تن (Ton),تن ,Ton
+وزن (Weight),Weight,کیلوگرم (kg),کیلوگرم ,kg
+وزن (Weight),Weight,پوند (lb),پوند ,lb
+وزن (Weight),Weight,گرم (g),گرم ,g
+وزن (Weight),Weight,میلیگرم (mg),میلیگرم ,mg
+وزن (Weight),Weight,میکروگرم (μg),میکروگرم ,μg
+وزن (Weight),Weight,اونسمعمولی (oz),اونسمعمولی ,oz
+وزن (Weight),Weight,اونستروا (تروی) (ozt),اونستروا ,تروی) (ozt
+وزن (Weight),Weight,اسلاگ (slug),اسلاگ ,slug
+وزن (Weight),Weight,نیوتن,نیوتن,
+وزن (Weight),Weight,کیلونیوتن,کیلونیوتن,
+وزن (Weight),Weight,قیراط (carat),قیراط ,carat
+وزن (Weight),Weight,مثقال,مثقال,
+وزن (Weight),Weight,سیر,سیر,
+وزن (Weight),Weight,چارک,چارک,
+وزن (Weight),Weight,سوت,سوت,
+وزن (Weight),Weight,گندم,گندم,
+وزن (Weight),Weight,نخود,نخود,
+وزن (Weight),Weight,خروار,خروار,
+وزن (Weight),Weight,مناصفهان,مناصفهان,
+وزن (Weight),Weight,منری,منری,
+وزن (Weight),Weight,منتبریز,منتبریز,
+وزن (Weight),Weight,منلرستان,منلرستان,
+فشار (Pressure),pressure,پاسکال (pa),پاسکال ,pa
+فشار (Pressure),pressure,بار (bar),بار ,bar
+فشار (Pressure),pressure,پیاسآی (psi),پیاسآی ,psi
+فشار (Pressure),pressure,کیلوپاسکال (kpa),کیلوپاسکال ,kpa
+فشار (Pressure),pressure,مگاپاسکال (Mpa),مگاپاسکال ,Mpa
+فشار (Pressure),pressure,گیگاپاسکال (Gpa),گیگاپاسکال ,Gpa
+فشار (Pressure),pressure,میلیبار (mbar),میلیبار ,mbar
+فشار (Pressure),pressure,باری (barye),باری ,barye
+فشار (Pressure),pressure,اتمسفر (atm),اتمسفر ,atm
+فشار (Pressure),pressure,تور (Torr),تور ,Torr
+فشار (Pressure),pressure,میلیمترجیوه (mmHg),میلیمترجیوه ,mmHg
+فشار (Pressure),pressure,سانتیمترجیوه (cmHg),سانتیمترجیوه ,cmHg
+فشار (Pressure),pressure,اینچجیوه (inHg),اینچجیوه ,inHg
+فشار (Pressure),pressure,فوتجیوه (fHg),فوتجیوه ,fHg
+فشار (Pressure),pressure,میلیمترآب (mmH۲o),میلیمترآب ,mmH۲o
+فشار (Pressure),pressure,سانتیمترآب (cmH۲o),سانتیمترآب ,cmH۲o
+فشار (Pressure),pressure,اینچآب (inH۲o),اینچآب ,inH۲o
+فشار (Pressure),pressure,فوتآب (fH۲o),فوتآب ,fH۲o
+فشار (Pressure),pressure,مترآب (mH۲o),مترآب ,mH۲o
+فشار (Pressure),pressure,اتمسفرفنی (at),اتمسفرفنی ,at
+فشار (Pressure),pressure,پوندبراینچمربع (psi),پوندبراینچمربع ,psi
+فشار (Pressure),pressure,پوندبرفوتمربع (psf),پوندبرفوتمربع ,psf
+فشار (Pressure),pressure,پوندالبرفوتمربع (pdl. sf),پوندالبرفوتمربع ,pdl. sf
+فشار (Pressure),pressure,نیوتنبرمترمربع,نیوتنبرمترمربع,
+فشار (Pressure),pressure,نیوتنبرسانتیمترمربع,نیوتنبرسانتیمترمربع,
+فشار (Pressure),pressure,نیوتنبرمیلیمترمربع,نیوتنبرمیلیمترمربع,
+فشار (Pressure),pressure,کیلونیوتنبرمترمربع,کیلونیوتنبرمترمربع,
+فشار (Pressure),pressure,کیلونیوتنبرسانتیمترمربع,کیلونیوتنبرسانتیمترمربع,
+فشار (Pressure),pressure,کیلونیوتنبرمیلیمترمربع,کیلونیوتنبرمیلیمترمربع,
+فشار (Pressure),pressure,کیلوگرمبرمترمربع,کیلوگرمبرمترمربع,
+فشار (Pressure),pressure,کیلوگرمبرسانتیمترمربع,کیلوگرمبرسانتیمترمربع,
+فشار (Pressure),pressure,کیلوگرمبرمیلیمترمربع,کیلوگرمبرمیلیمترمربع,
+فشار (Pressure),pressure,گرمبرمترمربع,گرمبرمترمربع,
+فشار (Pressure),pressure,گرمبرسانتیمترمربع,گرمبرسانتیمترمربع,
+فشار (Pressure),pressure,گرمبرمیلیمترمربع,گرمبرمیلیمترمربع,
+فشار (Pressure),pressure,تنبرمترمربع,تنبرمترمربع,
+حجم (Volume),volume,لیتر (L),لیتر ,L
+حجم (Volume),volume,میلیلیتر (mL),میلیلیتر ,mL
+حجم (Volume),volume,مترمکعب,مترمکعب,
+حجم (Volume),volume,سانتیمترمکعب,سانتیمترمکعب,
+حجم (Volume),volume,سیسی (cc),سیسی ,cc
+حجم (Volume),volume,میلیمترمکعب,میلیمترمکعب,
+حجم (Volume),volume,فوتمکعب,فوتمکعب,
+حجم (Volume),volume,گالنآمریکایی (gal-us),گالنآمریکایی ,gal-us
+حجم (Volume),volume,گالنانگلیسی (gal-uk),گالنانگلیسی ,gal-uk
+حجم (Volume),volume,دسیمترمکعب,دسیمترمکعب,
+حجم (Volume),volume,اینچمکعب,اینچمکعب,
+حجم (Volume),volume,یاردمکعب,یاردمکعب,
+حجم (Volume),volume,بشکه-نفتآمریکایی (us-barrel),بشکه-نفتآمریکایی ,us-barrel
+دما (Temperature),temperature,سانتیگراد (C),سانتیگراد ,C
+دما (Temperature),temperature,فارنهایت (F),فارنهایت ,F
+دما (Temperature),temperature,کلوین (K),کلوین ,K
+دما (Temperature),temperature,رانکین (R),رانکین ,R
+مساحت (Area),area,مترمربع,مترمربع,
+مساحت (Area),area,سانتیمترمربع,سانتیمترمربع,
+مساحت (Area),area,میلیمترمربع,میلیمترمربع,
+مساحت (Area),area,کیلومترمربع,کیلومترمربع,
+مساحت (Area),area,فوتمربع,فوتمربع,
+مساحت (Area),area,اینچمربع,اینچمربع,
+مساحت (Area),area,مایلمربع,مایلمربع,
+مساحت (Area),area,یاردمربع,یاردمربع,
+مساحت (Area),area,هکتار,هکتار,
+مساحت (Area),area,جریب (acre),جریب ,acre
+سرعت (Speed),speed,متربرثانیه (m/s),متربرثانیه ,m/s
+سرعت (Speed),speed,فوتبرثانیه (fps),فوتبرثانیه ,fps
+سرعت (Speed),speed,کیلومتربرساعت (km/h),کیلومتربرساعت ,km/h
+سرعت (Speed),speed,مایلبرساعت (mph),مایلبرساعت ,mph
+سرعت (Speed),speed,ماخ (درسطحدریا) (M),ماخ ,درسطحدریا) (M
+سرعت (Speed),speed,ماخ (ارتفاع ۱۲ کیلومتریسطحزمین) (M),ماخ ,ارتفاع ۱۲ کیلومتریسطحزمین) (M
+سرعت (Speed),speed,گره (knot),گره ,knot
+سرعت (Speed),speed,کیلومتربرثانیه (km/s),کیلومتربرثانیه ,km/s
+سرعت (Speed),speed,مایلبرثانیه (mps),مایلبرثانیه ,mps
+سرعت (Speed),speed,متربردقیقه (m/min),متربردقیقه ,m/min
+سرعت (Speed),speed,متربرساعت (m/h),متربرساعت ,m/h
+سرعت (Speed),speed,کیلومتربردقیقه (km/min),کیلومتربردقیقه ,km/min
+سرعت (Speed),speed,مایلبردقیقه (mpm),مایلبردقیقه ,mpm
+سرعت (Speed),speed,فوتبردقیقه (fpm),فوتبردقیقه ,fpm
+سرعت (Speed),speed,فوتبرساعت (fph),فوتبرساعت ,fph
+سرعت (Speed),speed,اینچبرثانیه (ips),اینچبرثانیه ,ips
+سرعت (Speed),speed,اینچبردقیقه (ipm),اینچبردقیقه ,ipm
+سرعت (Speed),speed,اینچبرساعت (iph),اینچبرساعت ,iph
+سرعت (Speed),speed,سانتیمتربرثانیه (cm/s),سانتیمتربرثانیه ,cm/s
+سرعت (Speed),speed,سانتیمتربردقیقه (cm/min),سانتیمتربردقیقه ,cm/min
+سرعت (Speed),speed,سانتیمتربرساعت (cm/h),سانتیمتربرساعت ,cm/h
+نیرو (Force),force,نیوتن (N),نیوتن ,N
+نیرو (Force),force,گرم-نیرو (gf),گرم-نیرو ,gf
+نیرو (Force),force,کیلوگرم-نیرو (kgf),کیلوگرم-نیرو ,kgf
+نیرو (Force),force,پوند-نیرو (lbf),پوند-نیرو ,lbf
+نیرو (Force),force,اونس-نیرو (ozf),اونس-نیرو ,ozf
+نیرو (Force),force,دین (dyn),دین ,dyn
+نیرو (Force),force,پوندال (pdl),پوندال ,pdl
+نیرو (Force),force,کیلوپوند (kp),کیلوپوند ,kp
+انرژی (Energy),energy,ژول (j),ژول ,j
+انرژی (Energy),energy,میلیژول (mj),میلیژول ,mj
+انرژی (Energy),energy,میکروژول (μj),میکروژول ,μj
+انرژی (Energy),energy,کیلوژول (kj),کیلوژول ,kj
+انرژی (Energy),energy,مگاژول (Mj),مگاژول ,Mj
+انرژی (Energy),energy,گیگاژول (Gj),گیگاژول ,Gj
+انرژی (Energy),energy,میلیواتساعت (mW. h),میلیواتساعت ,mW. h
+انرژی (Energy),energy,واتساعت (W. h),واتساعت ,W. h
+انرژی (Energy),energy,کیلوواتساعت (kW. h),کیلوواتساعت ,kW. h
+انرژی (Energy),energy,مگاواتساعت (MW. h),مگاواتساعت ,MW. h
+انرژی (Energy),energy,گیگاواتساعت (GW. h),گیگاواتساعت ,GW. h
+انرژی (Energy),energy,کالری (cal),کالری ,cal
+انرژی (Energy),energy,میلیکالری (mcal),میلیکالری ,mcal
+انرژی (Energy),energy,کیلوکالری (kcal),کیلوکالری ,kcal
+انرژی (Energy),energy,اسببخار-ساعت (hp. h),اسببخار-ساعت ,hp. h
+انرژی (Energy),energy,واحدگرماییانگلیسی (BTU),واحدگرماییانگلیسی ,BTU
+انرژی (Energy),energy,فوتپوند (ft. lb),فوتپوند ,ft. lb
+انرژی (Energy),energy,فوتپوندال (ft-pdl),فوتپوندال ,ft-pdl
+انرژی (Energy),energy,اینچپوندنیرو (in. lbf),اینچپوندنیرو ,in. lbf
+انرژی (Energy),energy,ارگ (erg),ارگ ,erg
+انرژی (Energy),energy,لیتراتمسفر (L. atm),لیتراتمسفر ,L. atm
+انرژی (Energy),energy,گالناتمسفرانگلیسی (impgal. atm),گالناتمسفرانگلیسی ,impgal. atm
+انرژی (Energy),energy,گالناتمسفرآمریکایی (usgal. atm),گالناتمسفرآمریکایی ,usgal. atm
+انرژی (Energy),energy,هارتری (Eh),هارتری ,Eh
+انرژی (Energy),energy,ریدبرگ (Ry),ریدبرگ ,Ry
+انرژی (Energy),energy,الکترونولت (ev),الکترونولت ,ev
+انرژی (Energy),energy,مگاالکترونولت (Mev),مگاالکترونولت ,Mev
+انرژی (Energy),energy,ترماستاندارد (Ec-therm),ترماستاندارد ,Ec-therm
+انرژی (Energy),energy,ترمآمریکایی (us-therm),ترمآمریکایی ,us-therm
+انرژی (Energy),energy,بشکهنفت (BOE),بشکهنفت ,BOE
+انرژی (Energy),energy,تننفت (toe),تننفت ,toe
+انرژی (Energy),energy,تنتیانتی (tonofTNT),تنتیانتی ,tonofTNT
+توان (Power),power,وات (W),وات ,W
+توان (Power),power,میلیوات (mW),میلیوات ,mW
+توان (Power),power,کیلووات (kW),کیلووات ,kW
+توان (Power),power,مگاوات (MW),مگاوات ,MW
+توان (Power),power,گیگاوات (GW),گیگاوات ,GW
+توان (Power),power,اسببخار (hp),اسببخار ,hp
+توان (Power),power,ژولبرثانیه (j/s),ژولبرثانیه ,j/s
+توان (Power),power,ژولبردقیقه (j/min),ژولبردقیقه ,j/min
+توان (Power),power,ژولبرساعت (j/h),ژولبرساعت ,j/h
+توان (Power),power,کالریبرثانیه (cal/s),کالریبرثانیه ,cal/s
+توان (Power),power,کالریبردقیقه (cal/min),کالریبردقیقه ,cal/min
+توان (Power),power,کالریبرساعت (cal/h),کالریبرساعت ,cal/h
+توان (Power),power,لیتراتمسفربرساعت (L. atm/h),لیتراتمسفربرساعت ,L. atm/h
+توان (Power),power,لیتراتمسفربردقیقه (L. atm/min),لیتراتمسفربردقیقه ,L. atm/min
+توان (Power),power,لیتراتمسفربرثانیه (L. atm/s),لیتراتمسفربرثانیه ,L. atm/s
+توان (Power),power,ارگبرثانیه (erg/s),ارگبرثانیه ,erg/s
+توان (Power),power,فوتپوندبرساعت (ft. lb/h),فوتپوندبرساعت ,ft. lb/h
+توان (Power),power,فوتپوندبردقیقه (ft. lb/min),فوتپوندبردقیقه ,ft. lb/min
+توان (Power),power,فوتپوندبرثانیه (ft. lb/s),فوتپوندبرثانیه ,ft. lb/s
+توان (Power),power,BTUبرثانیه (BTU/s),BTUبرثانیه ,BTU/s
+توان (Power),power,BTUبردقیقه (BTU/min),BTUبردقیقه ,BTU/min
+توان (Power),power,BTUبرساعت (BTU/h),BTUبرساعت ,BTU/h
+گشتاور (Torque),torque,نیوتن-متر (N. m),نیوتن-متر ,N. m
+گشتاور (Torque),torque,فوت-پوندنیرو (ft. lbf),فوت-پوندنیرو ,ft. lbf
+گشتاور (Torque),torque,متر-کیلوگرمنیرو (m. Kgf),متر-کیلوگرمنیرو ,m. Kgf
+گشتاور (Torque),torque,متر-کیلوپوند (m. Kp),متر-کیلوپوند ,m. Kp
+گشتاور (Torque),torque,سانتیمتر-کیلوگرمنیرو (cm. Kgf),سانتیمتر-کیلوگرمنیرو ,cm. Kgf
+گشتاور (Torque),torque,سانتیمتر-گرمنیرو (cm. gf),سانتیمتر-گرمنیرو ,cm. gf
+گشتاور (Torque),torque,اینچ-اونسنیرو (in. ozf),اینچ-اونسنیرو ,in. ozf
+گشتاور (Torque),torque,اینچ-پوندنیرو (in. lbf),اینچ-پوندنیرو ,in. lbf
+گشتاور (Torque),torque,فوتپوندال (ft. pdl),فوتپوندال ,ft. pdl
+زمان (Time),time,ثانیه (s),ثانیه ,s
+زمان (Time),time,کیلوثانیه (ks),کیلوثانیه ,ks
+زمان (Time),time,میلیثانیه (ms),میلیثانیه ,ms
+زمان (Time),time,میکروثانیه (μs),میکروثانیه ,μs
+زمان (Time),time,نانوثانیه (ns),نانوثانیه ,ns
+زمان (Time),time,پیکوثانیه (ps),پیکوثانیه ,ps
+زمان (Time),time,دقیقه (min),دقیقه ,min
+زمان (Time),time,ساعت (h),ساعت ,h
+زمان (Time),time,روز (Day),روز ,Day
+زمان (Time),time,هفته (Week),هفته ,Week
+زمان (Time),time,ماه (Month),ماه ,Month
+زمان (Time),time,ماهقمری,ماهقمری,
+زمان (Time),time,سال (Year),سال ,Year
+زمان (Time),time,سالقمری,سالقمری,
+زمان (Time),time,دهه (Decade),دهه ,Decade
+زمان (Time),time,قرن (Century),قرن ,Century
+چگالی (غلظت جرمی) (Density),density,تنبرمترمکعب (t/m³),تنبرمترمکعب ,t/m³
+چگالی (غلظت جرمی) (Density),density,کیلوگرمبرمترمکعب (kg/m³),کیلوگرمبرمترمکعب ,kg/m³
+چگالی (غلظت جرمی) (Density),density,کیلوگرمبرلیتر (kg/L),کیلوگرمبرلیتر ,kg/L
+چگالی (غلظت جرمی) (Density),density,کیلوگرمبردسیمترمکعب (kg/dm³),کیلوگرمبردسیمترمکعب ,kg/dm³
+چگالی (غلظت جرمی) (Density),density,گرمبرمترمکعب (g/m³),گرمبرمترمکعب ,g/m³
+چگالی (غلظت جرمی) (Density),density,گرمبرلیتر (g/L),گرمبرلیتر ,g/L
+چگالی (غلظت جرمی) (Density),density,گرمبرسانتیمترمکعب (g/cm³),گرمبرسانتیمترمکعب ,g/cm³
+چگالی (غلظت جرمی) (Density),density,گرمبرمیلیلیتر (g/mL),گرمبرمیلیلیتر ,g/mL
+چگالی (غلظت جرمی) (Density),density,گرمبرمیلیمترمکعب (g/mm³),گرمبرمیلیمترمکعب ,g/mm³
+چگالی (غلظت جرمی) (Density),density,میلیگرمبرلیتر (mg/L),میلیگرمبرلیتر ,mg/L
+چگالی (غلظت جرمی) (Density),density,میلیگرمبرسانتیمترمکعب (mg/cm³),میلیگرمبرسانتیمترمکعب ,mg/cm³
+چگالی (غلظت جرمی) (Density),density,میلیگرمبرمیلیلیتر (mg/mL),میلیگرمبرمیلیلیتر ,mg/mL
+چگالی (غلظت جرمی) (Density),density,میلیگرمبرمیلیمترمکعب (mg/mm³),میلیگرمبرمیلیمترمکعب ,mg/mm³
+چگالی (غلظت جرمی) (Density),density,پوندبرفوتمکعب (lb/ft³),پوندبرفوتمکعب ,lb/ft³
+چگالی (غلظت جرمی) (Density),density,پوندبراینچمکعب (lb/in³),پوندبراینچمکعب ,lb/in³
+چگالی (غلظت جرمی) (Density),density,پوندبریاردمکعب (lb/yd³),پوندبریاردمکعب ,lb/yd³
+چگالی (غلظت جرمی) (Density),density,اونسبرفوتمکعب (oz/ft³),اونسبرفوتمکعب ,oz/ft³
+چگالی (غلظت جرمی) (Density),density,اونسبراینچمکعب (oz/in³),اونسبراینچمکعب ,oz/in³
+چگالی (غلظت جرمی) (Density),density,اسلاگبرفوتمکعب (slug/ft³),اسلاگبرفوتمکعب ,slug/ft³
+چگالی (غلظت جرمی) (Density),density,پوندبرگالنآمریکایی (lb/gal),پوندبرگالنآمریکایی ,lb/gal
+چگالی (غلظت جرمی) (Density),density,پوندبربوشلآمریکایی,پوندبربوشلآمریکایی,
+چگالی (غلظت جرمی) (Density),density,پوندبرگالنانگلیسی,پوندبرگالنانگلیسی,
+چگالی (غلظت جرمی) (Density),density,گرمبرسیسی (g/cc),گرمبرسیسی ,g/cc
+چگالی (غلظت جرمی) (Density),density,میلیگرمبرسیسی (mg/cc),میلیگرمبرسیسی ,mg/cc
+فرکانس (Frequency),frequency,هرتز (Hz),هرتز ,Hz
+فرکانس (Frequency),frequency,دوربرثانیه (rps),دوربرثانیه ,rps
+فرکانس (Frequency),frequency,دوربردقیقه (rpm),دوربردقیقه ,rpm
+فرکانس (Frequency),frequency,دوربرساعت (rph),دوربرساعت ,rph
+فرکانس (Frequency),frequency,میلیهرتز (mHz),میلیهرتز ,mHz
+فرکانس (Frequency),frequency,کیلوهرتز (kHz),کیلوهرتز ,kHz
+فرکانس (Frequency),frequency,مگاهرتز (MHz),مگاهرتز ,MHz
+فرکانس (Frequency),frequency,گیگاهرتز (GHz),گیگاهرتز ,GHz
+فرکانس (Frequency),frequency,تراهرتز (THz),تراهرتز ,THz
+زاویه (Angle),degree,رادیان (Rad),رادیان ,Rad
+زاویه (Angle),degree,درجه (Deg),درجه ,Deg
+زاویه (Angle),degree,گراد (Grad),گراد ,Grad
+زاویه (Angle),degree,ثانیهقوسی (arcsecond),ثانیهقوسی ,arcsecond
+زاویه (Angle),degree,دقیقهقوسی (arcminute),دقیقهقوسی ,arcminute
+شتاب (Acceleration),shetab,متربرمجذورثانیه,متربرمجذورثانیه,
+شتاب (Acceleration),shetab,کیلومتربرمجذورثانیه,کیلومتربرمجذورثانیه,
+شتاب (Acceleration),shetab,سانتیمتربرمجذورثانیه,سانتیمتربرمجذورثانیه,
+شتاب (Acceleration),shetab,فوتبرمجذورثانیه,فوتبرمجذورثانیه,
+شتاب (Acceleration),shetab,مایلبرمجذورثانیه,مایلبرمجذورثانیه,
+شتاب (Acceleration),shetab,اینچبرمجذورثانیه,اینچبرمجذورثانیه,
+شتاب (Acceleration),shetab,گال (Gal),گال ,Gal
+شتاب (Acceleration),shetab,میلیگال (mGal),میلیگال ,mGal
+شتاب (Acceleration),shetab,میکروگال (μGal),میکروگال ,μGal
+شتاب (Acceleration),shetab,ناتبرثانیه (knot/s),ناتبرثانیه ,knot/s
+شتاب (Acceleration),shetab,کیلومتربرساعتبرثانیه,کیلومتربرساعتبرثانیه,
+شتاب (Acceleration),shetab,مایلبرساعتبرثانیه,مایلبرساعتبرثانیه,
+شارش جرمی (Mass Flow),debi,تنبرثانیه,تنبرثانیه,
+شارش جرمی (Mass Flow),debi,تنبردقیقه,تنبردقیقه,
+شارش جرمی (Mass Flow),debi,تنبرساعت,تنبرساعت,
+شارش جرمی (Mass Flow),debi,تنبرروز,تنبرروز,
+شارش جرمی (Mass Flow),debi,کیلوگرمبرثانیه,کیلوگرمبرثانیه,
+شارش جرمی (Mass Flow),debi,کیلوگرمبردقیقه,کیلوگرمبردقیقه,
+شارش جرمی (Mass Flow),debi,کیلوگرمبرساعت,کیلوگرمبرساعت,
+شارش جرمی (Mass Flow),debi,کیلوگرمبرروز,کیلوگرمبرروز,
+شارش جرمی (Mass Flow),debi,گرمبرثانیه,گرمبرثانیه,
+شارش جرمی (Mass Flow),debi,گرمبردقیقه,گرمبردقیقه,
+شارش جرمی (Mass Flow),debi,گرمبرساعت,گرمبرساعت,
+شارش جرمی (Mass Flow),debi,گرمبرروز,گرمبرروز,
+شارش جرمی (Mass Flow),debi,میلیگرمبرثانیه,میلیگرمبرثانیه,
+شارش جرمی (Mass Flow),debi,میلیگرمبردقیقه,میلیگرمبردقیقه,
+شارش جرمی (Mass Flow),debi,میلیگرمبرساعت,میلیگرمبرساعت,
+شارش جرمی (Mass Flow),debi,میلیگرمبرروز,میلیگرمبرروز,
+شارش جرمی (Mass Flow),debi,پوندبرثانیه,پوندبرثانیه,
+شارش جرمی (Mass Flow),debi,پوندبردقیقه,پوندبردقیقه,
+شارش جرمی (Mass Flow),debi,پوندبرساعت,پوندبرساعت,
+شارش جرمی (Mass Flow),debi,پوندبرروز,پوندبرروز,
+شارش جرمی (Mass Flow),debi,اونسبرثانیه,اونسبرثانیه,
+شارش جرمی (Mass Flow),debi,اونسبردقیقه,اونسبردقیقه,
+شارش جرمی (Mass Flow),debi,اونسبرساعت,اونسبرساعت,
+شارش جرمی (Mass Flow),debi,اونسبرروز,اونسبرروز,
+شارش حجمی (Volumetric Flow),debi-v,مترمکعببرثانیه,مترمکعببرثانیه,
+شارش حجمی (Volumetric Flow),debi-v,مترمکعببردقیقه,مترمکعببردقیقه,
+شارش حجمی (Volumetric Flow),debi-v,مترمکعببرساعت,مترمکعببرساعت,
+شارش حجمی (Volumetric Flow),debi-v,مترمکعببرروز,مترمکعببرروز,
+شارش حجمی (Volumetric Flow),debi-v,لیتربردقیقه,لیتربردقیقه,
+شارش حجمی (Volumetric Flow),debi-v,لیتربرثانیه,لیتربرثانیه,
+شارش حجمی (Volumetric Flow),debi-v,لیتربرساعت,لیتربرساعت,
+شارش حجمی (Volumetric Flow),debi-v,لیتربرروز,لیتربرروز,
+شارش حجمی (Volumetric Flow),debi-v,میلیلیتر (سیسیبرثانیه),میلیلیتر ,سیسیبرثانیه
+شارش حجمی (Volumetric Flow),debi-v,میلیلیتر (سیسیبردقیقه),میلیلیتر ,سیسیبردقیقه
+شارش حجمی (Volumetric Flow),debi-v,میلیلیتر (سیسیبرساعت),میلیلیتر ,سیسیبرساعت
+شارش حجمی (Volumetric Flow),debi-v,میلیلیتر (سیسیبرروز),میلیلیتر ,سیسیبرروز
+شارش حجمی (Volumetric Flow),debi-v,سانتیمترمکعببرثانیه,سانتیمترمکعببرثانیه,
+شارش حجمی (Volumetric Flow),debi-v,سانتیمترمکعببردقیقه,سانتیمترمکعببردقیقه,
+شارش حجمی (Volumetric Flow),debi-v,سانتیمترمکعببرساعت,سانتیمترمکعببرساعت,
+شارش حجمی (Volumetric Flow),debi-v,سانتیمترمکعببرروز,سانتیمترمکعببرروز,
+شارش حجمی (Volumetric Flow),debi-v,اینچمکعببرثانیه,اینچمکعببرثانیه,
+شارش حجمی (Volumetric Flow),debi-v,اینچمکعببردقیقه,اینچمکعببردقیقه,
+شارش حجمی (Volumetric Flow),debi-v,اینچمکعببرساعت,اینچمکعببرساعت,
+شارش حجمی (Volumetric Flow),debi-v,اینچمکعببرروز,اینچمکعببرروز,
+شارش حجمی (Volumetric Flow),debi-v,فوتمکعببرثانیه,فوتمکعببرثانیه,
+شارش حجمی (Volumetric Flow),debi-v,فوتمکعببردقیقه,فوتمکعببردقیقه,
+شارش حجمی (Volumetric Flow),debi-v,فوتمکعببرساعت,فوتمکعببرساعت,
+شارش حجمی (Volumetric Flow),debi-v,فوتمکعببرروز,فوتمکعببرروز,
+شارش حجمی (Volumetric Flow),debi-v,گالنآمریکاییبرثانیه,گالنآمریکاییبرثانیه,
+شارش حجمی (Volumetric Flow),debi-v,گالنآمریکاییبردقیقه,گالنآمریکاییبردقیقه,
+شارش حجمی (Volumetric Flow),debi-v,گالنآمریکاییبرساعت,گالنآمریکاییبرساعت,
+شارش حجمی (Volumetric Flow),debi-v,گالنآمریکاییبرروز,گالنآمریکاییبرروز,
+ذخیره دیجیتال (Digital storage),data-storage,بیت (Bit),بیت ,Bit
+ذخیره دیجیتال (Digital storage),data-storage,کیلوبیت (kb),کیلوبیت ,kb
+ذخیره دیجیتال (Digital storage),data-storage,کیبیبیت (Kib),کیبیبیت ,Kib
+ذخیره دیجیتال (Digital storage),data-storage,مگابیت (Mb),مگابیت ,Mb
+ذخیره دیجیتال (Digital storage),data-storage,مبیبیت (Mib),مبیبیت ,Mib
+ذخیره دیجیتال (Digital storage),data-storage,گیگابیت (Gb),گیگابیت ,Gb
+ذخیره دیجیتال (Digital storage),data-storage,گیبیبیت (Gib),گیبیبیت ,Gib
+ذخیره دیجیتال (Digital storage),data-storage,ترابیت (Tb),ترابیت ,Tb
+ذخیره دیجیتال (Digital storage),data-storage,تبیبیت (Tib),تبیبیت ,Tib
+ذخیره دیجیتال (Digital storage),data-storage,پتابیت (Pb),پتابیت ,Pb
+ذخیره دیجیتال (Digital storage),data-storage,پبیبیت (Pib),پبیبیت ,Pib
+ذخیره دیجیتال (Digital storage),data-storage,بایت (Byte),بایت ,Byte
+ذخیره دیجیتال (Digital storage),data-storage,کیلوبایت (kB),کیلوبایت ,kB
+ذخیره دیجیتال (Digital storage),data-storage,کیبیبایت (KiB),کیبیبایت ,KiB
+ذخیره دیجیتال (Digital storage),data-storage,مگابایت (MB),مگابایت ,MB
+ذخیره دیجیتال (Digital storage),data-storage,مبیبایت (MiB),مبیبایت ,MiB
+ذخیره دیجیتال (Digital storage),data-storage,گیگابایت (GB),گیگابایت ,GB
+ذخیره دیجیتال (Digital storage),data-storage,گیبیبایت (GiB),گیبیبایت ,GiB
+ذخیره دیجیتال (Digital storage),data-storage,ترابایت (TB),ترابایت ,TB
+ذخیره دیجیتال (Digital storage),data-storage,تبیبایت (TiB),تبیبایت ,TiB
+ذخیره دیجیتال (Digital storage),data-storage,پتابایت (PB),پتابایت ,PB
+ذخیره دیجیتال (Digital storage),data-storage,پبیبایت (PiB),پبیبایت ,PiB
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,بیتبرثانیه (Bit/s),بیتبرثانیه ,Bit/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,کیلوبیتبرثانیه (kb/s),کیلوبیتبرثانیه ,kb/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,کیبیبیتبرثانیه (Kib/s),کیبیبیتبرثانیه ,Kib/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,مگابیتبرثانیه (Mb/s),مگابیتبرثانیه ,Mb/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,مبیبیتبرثانیه (Mib/s),مبیبیتبرثانیه ,Mib/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,گیگابیتبرثانیه (Gb/s),گیگابیتبرثانیه ,Gb/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,گیبیبیتبرثانیه (Gib/s),گیبیبیتبرثانیه ,Gib/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,ترابیتبرثانیه (Tb/s),ترابیتبرثانیه ,Tb/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,تبیبیتبرثانیه (Tib/s),تبیبیتبرثانیه ,Tib/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,پتابیتبرثانیه (Pb/s),پتابیتبرثانیه ,Pb/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,پبیبیتبرثانیه (Pib/s),پبیبیتبرثانیه ,Pib/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,بایتبرثانیه (Byte/s),بایتبرثانیه ,Byte/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,کیلوبایتبرثانیه (kB/s),کیلوبایتبرثانیه ,kB/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,کیبیبایتبرثانیه (KiB/s),کیبیبایتبرثانیه ,KiB/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,مگابایتبرثانیه (MB/s),مگابایتبرثانیه ,MB/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,مبیبایتبرثانیه (MiB/s),مبیبایتبرثانیه ,MiB/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,گیگابایتبرثانیه (GB/s),گیگابایتبرثانیه ,GB/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,گیبیبایتبرثانیه (GiB/s),گیبیبایتبرثانیه ,GiB/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,ترابایتبرثانیه (TB/s),ترابایتبرثانیه ,TB/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,تبیبایتبرثانیه (TiB/s),تبیبایتبرثانیه ,TiB/s
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,بیتبردقیقه (Bit/min),بیتبردقیقه ,Bit/min
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,کیلوبیتبردقیقه (kb/min),کیلوبیتبردقیقه ,kb/min
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,مگابیتبردقیقه (Mb/min),مگابیتبردقیقه ,Mb/min
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,گیگابیتبردقیقه (Gb/min),گیگابیتبردقیقه ,Gb/min
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,ترابیتبردقیقه (Tb/min),ترابیتبردقیقه ,Tb/min
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,بایتبردقیقه (Byte/min),بایتبردقیقه ,Byte/min
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,کیلوبایتبردقیقه (kB/min),کیلوبایتبردقیقه ,kB/min
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,مگابایتبردقیقه (MB/min),مگابایتبردقیقه ,MB/min
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,گیگابایتبردقیقه (GB/min),گیگابایتبردقیقه ,GB/min
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,ترابایتبردقیقه (TB/min),ترابایتبردقیقه ,TB/min
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,بیتبرساعت (Bit/h),بیتبرساعت ,Bit/h
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,کیلوبیتبرساعت (kb/h),کیلوبیتبرساعت ,kb/h
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,مگابیتبرساعت (Mb/h),مگابیتبرساعت ,Mb/h
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,گیگابیتبرساعت (Gb/h),گیگابیتبرساعت ,Gb/h
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,ترابیتبرساعت (Tb/h),ترابیتبرساعت ,Tb/h
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,بایتبرساعت (Byte/h),بایتبرساعت ,Byte/h
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,کیلوبایتبرساعت (kB/h),کیلوبایتبرساعت ,kB/h
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,مگابایتبرساعت (MB/h),مگابایتبرساعت ,MB/h
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,گیگابایتبرساعت (GB/h),گیگابایتبرساعت ,GB/h
+انتقال داده (سرعت اینترنت)(Data-transfer),data-transfer,ترابایتبرساعت (TB/h),ترابایتبرساعت ,TB/h
+پیشوندهای SI,pishvand,یوتا (Y),یوتا ,Y
+پیشوندهای SI,pishvand,زتا (Z),زتا ,Z
+پیشوندهای SI,pishvand,اگزا (E),اگزا ,E
+پیشوندهای SI,pishvand,پتا (P),پتا ,P
+پیشوندهای SI,pishvand,ترا (T),ترا ,T
+پیشوندهای SI,pishvand,گیگا (G),گیگا ,G
+پیشوندهای SI,pishvand,مگا (M),مگا ,M
+پیشوندهای SI,pishvand,کیلو (k),کیلو ,k
+پیشوندهای SI,pishvand,هکتو (h),هکتو ,h
+پیشوندهای SI,pishvand,دکا (da),دکا ,da
+پیشوندهای SI,pishvand,یونی (u),یونی ,u
+پیشوندهای SI,pishvand,دسی (d),دسی ,d
+پیشوندهای SI,pishvand,سانتی (c),سانتی ,c
+پیشوندهای SI,pishvand,میلی (m),میلی ,m
+پیشوندهای SI,pishvand,میکرو (μ),میکرو ,μ
+پیشوندهای SI,pishvand,نانو (n),نانو ,n
+پیشوندهای SI,pishvand,پیکو (p),پیکو ,p
+پیشوندهای SI,pishvand,فمتو (f),فمتو ,f
+پیشوندهای SI,pishvand,آتو (a),آتو ,a
+پیشوندهای SI,pishvand,زپتو (z),زپتو ,z
+پیشوندهای SI,pishvand,یوکتو (y),یوکتو ,y
