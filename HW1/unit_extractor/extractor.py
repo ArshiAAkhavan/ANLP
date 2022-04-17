@@ -2,16 +2,12 @@ import re
 from typing import List, Set
 
 from parsi_io.modules.number_extractor import NumberExtractor
-from unit_extractor.consts import (
-    ITEM_GROUP_NAME,
-    NUMBER_GROUP_NAME,
-    NUMBER_TRASH_MAGIC,
-    QUANTIFIER_TRASH_MAGIC,
-    UNIT_GROUP_NAME,
-    UNIT_TRASH_MAGIC,
-    pattern_regex,
-    unit_overlap_regex,
-)
+from unit_extractor.consts import (ADVERB_TRASH_MAGIC, ITEM_GROUP_NAME,
+                                   NUMBER_GROUP_NAME, NUMBER_TRASH_MAGIC,
+                                   QUANTIFIER_GROUP_NAME,
+                                   QUANTIFIER_TRASH_MAGIC, UNIT_GROUP_NAME,
+                                   UNIT_TRASH_MAGIC, pattern_regex,
+                                   unit_overlap_regex)
 from unit_extractor.output import RawOutput, ValidOutput
 from unit_retriever import UnitRetriever
 
@@ -21,12 +17,15 @@ class UnitExtractor:
         self.num_extractor = NumberExtractor()
         self.units = UnitRetriever().retrieve()
 
-        # TODO: retrevie it from ahmad
         unit_names = [unit.persian.strip() for unit in self.units]
         self.unit_regex = re.compile(f'({"|".join(unit_names)})')
 
-        quantifiers = ["سرعت", "جرم"]
+        # TODO: retrevie it from ahmad
+        quantifiers = ["سرعت", "جرم", "طول"]
         self.quantifier_regex = re.compile(f'({"|".join(quantifiers)})')
+
+        adverbs = ["زیاد", "کم"]
+        self.adverb_regex = re.compile(f'({"|".join(adverbs)})')
 
     def _normalize_numbers(self, matn: str) -> str:
         for num in self.num_extractor.run(matn):
@@ -43,6 +42,15 @@ class UnitExtractor:
             end = span[1]
             length = end - start
             matn = matn[:start] + QUANTIFIER_TRASH_MAGIC * length + matn[end:]
+        return matn
+
+    def _normalize_adverb(self, matn: str) -> str:
+        for match in self.adverb_regex.finditer(matn):
+            span = match.span()
+            start = span[0]
+            end = span[1]
+            length = end - start
+            matn = matn[:start] + ADVERB_TRASH_MAGIC * length + matn[end:]
         return matn
 
     def _normalize_units(self, matn: str) -> str:
@@ -76,13 +84,20 @@ class UnitExtractor:
                     unit = None
 
                 try:
+                    quan = match.span(QUANTIFIER_GROUP_NAME)
+                except IndexError:
+                    quan = None
+
+                try:
                     item = match.span(ITEM_GROUP_NAME)
                 except IndexError:
                     item = None
 
                 span = match.span()
 
-                res = RawOutput(amount=amount, unit=unit, item=item, span=span)
+                res = RawOutput(
+                    amount=amount, unit=unit, item=item, span=span, quan=quan
+                )
                 results.add(res)
         return results
 
@@ -91,18 +106,23 @@ class UnitExtractor:
     ) -> List[ValidOutput]:
         results = []
         for raw in raw_outputs:
-            unit = matn[raw.unit[0] : raw.unit[1]] if raw.unit else ""
-            item = matn[raw.item[0] : raw.item[1]] if raw.item else ""
-            marker = matn[raw.span[0] : raw.span[1]]
+            unit = matn[raw.unit[0]: raw.unit[1]] if raw.unit else ""
+            quan = matn[raw.quan[0]: raw.quan[1]] if raw.quan else ""
+            item = matn[raw.item[0]: raw.item[1]] if raw.item else ""
+            marker = matn[raw.span[0]: raw.span[1]]
 
             if raw.amount:
-                amount_raw = matn[raw.amount[0] : raw.amount[1]]
+                amount_raw = matn[raw.amount[0]: raw.amount[1]]
                 amount = self.num_extractor.run(amount_raw)[0]["value"]
             else:
                 amount = ""
 
+            quantity = (self.get_quantity_from_unit(unit),)
+            if not quantity or len(quantity) == 0:
+                quantity = quan
+
             o = ValidOutput(
-                quantity=self.get_quantity_from_unit(unit),
+                quantity=quan,
                 unit=unit,
                 amount=amount,
                 item=item,
@@ -122,6 +142,7 @@ class UnitExtractor:
         m1 = self._normalize_numbers(matn)
         m2 = self._normalize_units(m1)
         m3 = self._normalize_quantifier(m2)
-        raw_outputs = self._extract_patterns(m3)
+        m4 = self._normalize_adverb(m3)
+        raw_outputs = self._extract_patterns(m4)
         valid_outputs = self._generate_outputs(matn, raw_outputs)
         return valid_outputs

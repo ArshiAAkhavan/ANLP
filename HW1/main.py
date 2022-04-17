@@ -1,11 +1,24 @@
-from pprint import pprint as print
+from pprint import pprint
 from unit_extractor import UnitExtractor
 
 extractor = UnitExtractor()
 matn = "دیروز با مهدی رفتم ۲ متر کالباس خریدم و با هم با سرعت ۲۵ متر بر ثانیه دویدیم"
 results = extractor.run(matn)
-print(results)
-matn = "شهاب سنگی به جرم ۱۰ کیلوگرم به زمین برخورد کرد"
+pprint(results)
+print()
 
+matn = "شهاب سنگی به جرم ۱۰ کیلوگرم به زمین برخورد کرد"
 results = extractor.run(matn)
-print(results)
+pprint(results)
+print()
+
+matn = "یک خودرو با سرعت زیاد از ما سبقت گرفت"
+results = extractor.run(matn)
+pprint(results)
+print()
+
+
+matn = "یک خودرو با طول زیاد از کنار ما رد شد"
+results = extractor.run(matn)
+pprint(results)
+print()

@@ -3,12 +3,13 @@ import re
 NUMBER_TRASH_MAGIC = "⌠"
 UNIT_TRASH_MAGIC = "⌡"
 QUANTIFIER_TRASH_MAGIC = "Ж"
-ANOTHER_RESERVED_TRASH_MAGIC = "Д"
+ADVERB_TRASH_MAGIC = "Д"
 
 
 NUMBER_GROUP_NAME = "number"
 UNIT_GROUP_NAME = "unit"
 ITEM_GROUP_NAME = "item"
+ADVERB_GROUP_NAME = "adverb"
 QUANTIFIER_GROUP_NAME = "quantifier"
 
 
@@ -16,6 +17,7 @@ num_regex = f"(?P<{NUMBER_GROUP_NAME}>{NUMBER_TRASH_MAGIC}+)"
 unit_regex = f"(?P<{UNIT_GROUP_NAME}>{UNIT_TRASH_MAGIC}+)"
 item_regex = f"(?P<{ITEM_GROUP_NAME}>[\u0600-\u06ff]+)"
 quantity_regex = f"(?P<{QUANTIFIER_GROUP_NAME}>{QUANTIFIER_TRASH_MAGIC}+)"
+adverb_regex = f"(?P<{ADVERB_GROUP_NAME}>{ADVERB_TRASH_MAGIC}+)"
 white_space_regex = r"(\s+)"
 
 
@@ -25,11 +27,13 @@ pattern_map = {
     "I": item_regex,
     " ": white_space_regex,
     "Q": quantity_regex,
+    "A": adverb_regex,
 }
 
 patterns_raw = [
     "N U I",
     "Q N U",
+    "Q A",
 ]
 
 
