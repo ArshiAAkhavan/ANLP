@@ -4,7 +4,8 @@ from typing import List, Set
 from parsi_io.modules.number_extractor import NumberExtractor
 from unit_extractor.consts import (ITEM_PATTERN_NAME, NUMBER_PATTERN_NAME,
                                    NUMBER_TRASH_MAGIC, UNIT_PATTERN_NAME,
-                                   UNIT_TRASH_MAGIC, pattern_regex)
+                                   UNIT_TRASH_MAGIC, pattern_regex,
+                                   unit_overlap_regex)
 from unit_extractor.output import RawOutput, ValidOutput
 from unit_retriever import UnitRetriever
 
@@ -32,6 +33,14 @@ class UnitExtractor:
             end = span[1]
             length = end-start
             matn = matn[: start] + UNIT_TRASH_MAGIC * length + matn[end:]
+
+        for match in unit_overlap_regex.finditer(matn):
+            span = match.span(2)
+            start = span[0]
+            end = span[1]
+            length = end-start
+            matn = matn[: start] + UNIT_TRASH_MAGIC * length + matn[end:]
+        print(matn)
         return matn
 
     def _extract_patterns(self, matn: str) -> List[RawOutput]:

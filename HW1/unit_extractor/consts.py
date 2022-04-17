@@ -17,5 +17,6 @@ patterns = [
     f"(?P<{NUMBER_PATTERN_NAME}>{num_patterns})\s+(?P<{UNIT_PATTERN_NAME}>{unit_patterns})+\s+(?P<{ITEM_PATTERN_NAME}>{word_patterns})",
 ]
 
+unit_overlap_regex = re.compile(f'({UNIT_TRASH_MAGIC}+)(\s+)(?:{UNIT_TRASH_MAGIC})')
 pattern_regex = [re.compile(pattern) for pattern in patterns]
 
