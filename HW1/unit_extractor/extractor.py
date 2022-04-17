@@ -27,7 +27,7 @@ class UnitExtractor:
         adverbs = ["زیاد", "کم"]
         self.adverb_regex = re.compile(f'({"|".join(adverbs)})')
 
-    def _normalize_numbers(self, matn: str) -> str:
+    def _tag_numbers(self, matn: str) -> str:
         for num in self.num_extractor.run(matn):
             start = num["span"][0]
             end = num["span"][1]
@@ -35,31 +35,24 @@ class UnitExtractor:
             matn = matn[0:start] + NUMBER_TRASH_MAGIC * length + matn[end:]
         return matn
 
-    def _normalize_quantifier(self, matn: str) -> str:
-        for match in self.quantifier_regex.finditer(matn):
+    @staticmethod
+    def _tag_by_name(matn: str, regex, tag: str) -> str:
+        for match in regex.finditer(matn):
             span = match.span()
             start = span[0]
             end = span[1]
             length = end - start
-            matn = matn[:start] + QUANTIFIER_TRASH_MAGIC * length + matn[end:]
+            matn = matn[:start] + tag * length + matn[end:]
         return matn
 
-    def _normalize_adverb(self, matn: str) -> str:
-        for match in self.adverb_regex.finditer(matn):
-            span = match.span()
-            start = span[0]
-            end = span[1]
-            length = end - start
-            matn = matn[:start] + ADVERB_TRASH_MAGIC * length + matn[end:]
-        return matn
+    def _tag_quantifier(self, matn: str) -> str:
+        return self._tag_by_name(matn, self.quantifier_regex, QUANTIFIER_TRASH_MAGIC)
 
-    def _normalize_units(self, matn: str) -> str:
-        for match in self.unit_regex.finditer(matn):
-            span = match.span()
-            start = span[0]
-            end = span[1]
-            length = end - start
-            matn = matn[:start] + UNIT_TRASH_MAGIC * length + matn[end:]
+    def _tag_adverb(self, matn: str) -> str:
+        return self._tag_by_name(matn, self.adverb_regex, ADVERB_TRASH_MAGIC)
+
+    def _tag_units(self, matn: str) -> str:
+        matn = self._tag_by_name(matn, self.unit_regex, UNIT_TRASH_MAGIC)
 
         for match in unit_overlap_regex.finditer(matn):
             span = match.span(2)
@@ -139,10 +132,10 @@ class UnitExtractor:
         return ""
 
     def run(self, matn: str) -> List[ValidOutput]:
-        m1 = self._normalize_numbers(matn)
-        m2 = self._normalize_units(m1)
-        m3 = self._normalize_quantifier(m2)
-        m4 = self._normalize_adverb(m3)
+        m1 = self._tag_numbers(matn)
+        m2 = self._tag_units(m1)
+        m3 = self._tag_quantifier(m2)
+        m4 = self._tag_adverb(m3)
         raw_outputs = self._extract_patterns(m4)
         valid_outputs = self._generate_outputs(matn, raw_outputs)
         return valid_outputs
