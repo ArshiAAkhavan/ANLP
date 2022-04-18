@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from functools import partial
+import json
 from typing import Callable, List, Tuple
 import requests
 import re
@@ -49,94 +50,19 @@ class Unit:
 
 class Normalizer:
     Converter = Callable[[str], str]
-    delimiter = r'(\\u200c|\\s*)'
-    prefixes = [
-        'یوتا',
-        'زتا',
-        'اگزا',
-        'پتا',
-        'ترا',
-        'گیگا',
-        'مگا',
-        'کیلو',
-        'هکتو',
-        'دکا',
-        'یونی',
-        'دسی',
-        'سانتی',
-        'میلی',
-        'میکرو',
-        'نانو',
-        'پیکو',
-        'فمتو',
-        'آتو',
-        'زپتو',
-        'یوکتو',
-        'متر',
-        'مایل',
-        'nautical',
-        'فرسنگ',
-        'فرسخ',
-        'سال',
-        'light',
-        'ثانیه',
-        'واحد',
-        'شعاع',
-        'solar',
-        'اونس',
-        'من',
-        'اینچ',
-        'فوت',
-        'اتمسفر',
-        'پوندال',
-        'پوند',
-        'بر',
-        'نیوتن',
-        'گرم',
-        'تن',
-        'گالن',
-        'یارد',
-        'بشکه',
-        'نفت',
-        'وات',
-        'اسب',
-        'لیتر',
-        'الکترون',
-        'ترم',
-        'ژول',
-        'کالری',
-        'ارگ',
-        'BTU',
-        'ماه',
-        'اسلاگ',
-        'بوشل',
-        'دور',
-        'دقیقه',
-        'مجذور',
-        'نات',
-        'سیسی',
-        'مکعب',
-        'مربع',
-        'آمریکایی',
-        'کیبی',
-        'مبی',
-        'گیبی',
-        'تبی',
-        'پبی',
-        'بیت',
-        'بایت',
-    ]
-    replacements = [
-        ('سیسی', r'سی\Dسی'),
-        ('بشکه-', r'بشکه\D'),
-        ('تیانتی', r'تی\Dان\Dتی'),
-        ('tonofTNT', r'ton\Dof\DTNT'),
+    def __init__(self, conf_path: str = 'unit_normalization_conf.json') -> None:
+        conf = self.__load_conf(conf_path)
+        self.__delimiter = conf['delimiter']
+        prefixes = conf['prefixes']
+        replacements = conf['replacements']
+        self.__handle_prefix = self.__converter(rf'(?P<prefix>(^|\W)({"|".join(prefixes)}))(?P<suffix>\w+.*)$',
+                                                rf'\g<prefix>{self.__delimiter}\g<suffix>')
+        self.__handle_replacements = self.__replacer(replacements)
 
-    ]
-    def __init__(self) -> None:
-        self.__handle_prefix = self.__converter(rf'(?P<prefix>(^|\W)({"|".join(self.prefixes)}))(?P<suffix>\w+.*)$',
-                                                rf'\g<prefix>{self.delimiter}\g<suffix>')
-        self.__handle_replacements = self.__replacer(self.replacements)
+    @staticmethod
+    def __load_conf(conf_path: str) -> dict:
+        with open(conf_path, 'r') as f:
+            return json.load(f)
 
     @staticmethod
     def __convert(pattern: re.Pattern, repl: str, text: str) -> str:
@@ -148,10 +74,9 @@ class Normalizer:
     def __converter(cls, pattern: str, repl: str) -> 'Normalizer.Converter':
         return partial(cls.__convert, re.compile(pattern, re.IGNORECASE), repl)
 
-    @classmethod
-    def __replacer(cls, replacements: List[Tuple[str, str]]) -> 'Normalizer.Converter':
+    def __replacer(self, replacements: List[Tuple[str, str]]) -> 'Normalizer.Converter':
         replacements: List[Tuple[re.Pattern, str]] = [
-            (re.compile(pattern, re.IGNORECASE), repl.replace(r'\D', cls.delimiter))
+            (re.compile(pattern, re.IGNORECASE), repl.replace(r'\D', self.__delimiter))
             for pattern, repl in replacements
         ]
         def replacer(text: str) -> str:
