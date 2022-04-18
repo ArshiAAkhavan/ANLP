@@ -1,12 +1,13 @@
-from dataclasses import dataclass
-from functools import partial
-import json
-from typing import Callable, List, Tuple
+from dataclasses import dataclass, field
+import os
+from typing import List, Tuple
 import requests
 import re
 
 from bs4 import BeautifulSoup
 import pandas as pd
+
+from unit_normalizer import UnitNormalizer
 
 
 '''
@@ -29,15 +30,28 @@ response: {"status":200,"v":"0.001"}
 
 @dataclass
 class Quantity:
-    full_name: str
+    names: List[str]
     id: str
+    units: List['Unit'] = field(default_factory=list)
+
+    @staticmethod
+    def to_dfs(quantities: List['Quantity']) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+        q_df = pd.DataFrame(sum([
+            [(q.id, name) for name in q.names] for q in quantities
+        ], []), columns=['id', 'name'])
+        u_df = pd.DataFrame(sum([
+            [(q.id, u.full_name) for u in q.units] for q in quantities
+        ], []), columns=['qid', 'id'])
+        u_names_df = pd.DataFrame(sum([
+            [(u.full_name, name) for name in u.names] for u in sum([q.units for q in quantities], [])
+        ], []), columns=['uid', 'name'])
+        return q_df, u_df, u_names_df
 
 
 @dataclass
 class Unit:
-    quantity: Quantity
     full_name: str
-    name: str
+    names: List[str] = field(default_factory=list)
 
     @staticmethod
     def to_df(units: List['Unit']) -> pd.DataFrame:
@@ -48,68 +62,35 @@ class Unit:
         return df
 
 
-class UnitNormalizer:
-    Converter = Callable[[str], str]
-    def __init__(self, conf_path: str = 'unit_normalization_conf.json') -> None:
-        conf = self.__load_conf(conf_path)
-        self.__delimiter = conf['delimiter']
-        prefixes = conf['prefixes']
-        replacements = conf['replacements']
-        self.__handle_prefix = self.__converter(rf'(?P<prefix>(^|\W)({"|".join(prefixes)}))(?P<suffix>\w+.*)$',
-                                                rf'\g<prefix>{self.__delimiter}\g<suffix>')
-        self.__handle_replacements = self.__replacer(replacements)
-
-    @staticmethod
-    def __load_conf(conf_path: str) -> dict:
-        with open(conf_path, 'r') as f:
-            return json.load(f)
-
-    @staticmethod
-    def __convert(pattern: re.Pattern, repl: str, text: str) -> str:
-        while (newtext := pattern.sub(repl, text)) != text:
-            text = newtext
-        return text
-
-    @classmethod
-    def __converter(cls, pattern: str, repl: str) -> 'UnitNormalizer.Converter':
-        return partial(cls.__convert, re.compile(pattern, re.IGNORECASE), repl)
-
-    def __replacer(self, replacements: List[Tuple[str, str]]) -> 'UnitNormalizer.Converter':
-        replacements: List[Tuple[re.Pattern, str]] = [
-            (re.compile(pattern, re.IGNORECASE), repl.replace(r'\D', self.__delimiter))
-            for pattern, repl in replacements
-        ]
-        def replacer(text: str) -> str:
-            for pattern, repl in replacements:
-                text = pattern.sub(repl, text)
-            return text
-        return replacer
-
-    def normalize(self, text: str) -> str:
-        text = self.__handle_prefix(text)
-        text = self.__handle_replacements(text)
-        return text
-
-
 class UnitRetriever:
+    __first_pattern = re.compile(r'^([^()]*[^()\s])')
+    __other_pattern = re.compile(r'\s*\(([^()]*[^()\s])\)')
 
     def __init__(self) -> None:
         self.__session = requests.session()
         self.__session.headers.update({
             'User-Agent': 'Mozilla/5.0',
         })
-        self.__first_pattern = re.compile(r'^([^()]*[^()\s])')
-        self.__other_pattern = re.compile(r'\s*\(([^()]*[^()\s])\)')
         self.__unit_normalizer = UnitNormalizer()
+
+    @classmethod
+    def __split_names(cls, fullname: str) -> List[str]:
+        first = cls.__first_pattern.match(fullname).group(1)
+        if first == 'فوت':
+            ###### TOFF ######
+            others = cls.__other_pattern.findall(fullname)[0].split('-')
+        else:
+            others = cls.__other_pattern.findall(fullname)
+        return [first] + others
 
     def __get_quantities(self) -> List[Quantity]:
         r = self.__session.get('https://www.bahesab.ir/calc/unit/')
         if r.status_code != 200:
             raise Exception('Failed to get quantities from https://www.bahesab.ir/calc/unit/')
         soup = BeautifulSoup(r.text, features='lxml').select('select.select1 > option')
-        return [Quantity(item.get_text(), item['value']) for item in soup]
+        return [Quantity(self.__split_names(item.get_text()), item['value']) for item in soup]
 
-    def __get_units(self, quantity: Quantity) -> List[Unit]:
+    def __set_units(self, quantity: Quantity) -> None:
         data = {
             'string_o': f'{{"a":1,"b":"{quantity.id}","c":0,"d":0,"e":0}}',
         }
@@ -121,39 +102,29 @@ class UnitRetriever:
 
         soup = BeautifulSoup(r.json()['v'], features='lxml').select('option')
         values = [o['value'] for o in soup]
-        units = []
         for unit_fullname in values:
+            unit = Unit(unit_fullname, [self.__unit_normalizer.normalize(name) for name in self.__split_names(unit_fullname)])
+            quantity.units.append(unit)
 
-            first = self.__first_pattern.match(unit_fullname).group(1)
-            units.append(Unit(quantity, unit_fullname, self.__unit_normalizer.normalize(first)))
-
-            if first == 'فوت':
-                ###### TOFF ######
-                others = self.__other_pattern.findall(unit_fullname)[0].split('-')
-            else:
-                others = self.__other_pattern.findall(unit_fullname)
-
-            units += [Unit(quantity, unit_fullname, self.__unit_normalizer.normalize(other)) for other in others]
-
-        return units
-
-    def retrieve(self) -> List[Unit]:
+    def retrieve(self) -> List[Quantity]:
         quantities = self.__get_quantities()
-        units = []
         for quantity in quantities:
-            units += self.__get_units(quantity)
-        return units
+            self.__set_units(quantity)
+        return quantities
 
 
 if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description='Retrieve units from bahesab.ir')
-    parser.add_argument('--output', '-o', type=str, default='units.csv',
-                        help='output file name')
+    parser.add_argument('--directory', '-d', type=str, default='./',
+                        help='output directory path')
 
     args = parser.parse_args()
 
-    units = UnitRetriever().retrieve()
-    df = Unit.to_df(units)
-    df.to_csv(args.output, index=False)
+    quantities = UnitRetriever().retrieve()
+    q_df, u_df, u_names_df = Quantity.to_dfs(quantities)
+
+    q_df.to_csv(os.path.join(args.directory, 'quantities.csv'), index=False)
+    u_df.to_csv(os.path.join(args.directory, 'units.csv'), index=False)
+    u_names_df.to_csv(os.path.join(args.directory, 'unit_names.csv'), index=False)
