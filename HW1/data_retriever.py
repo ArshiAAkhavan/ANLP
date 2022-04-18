@@ -1,5 +1,7 @@
 from dataclasses import dataclass, asdict
 import json
+import os
+import pickle
 import time
 from typing import Iterator, List, Set
 import requests
@@ -22,11 +24,29 @@ class Document:
     text: str
 
 
+def filecache(title: str):
+    def decorator(func):
+        def wrapper(self: 'DataRetriever', *args, **kwargs):
+            cache_path = f'.cache/{title.replace(" ", "_")}_{self.page_per_query}.pkl'
+            if os.path.exists(cache_path):
+                with open(cache_path, 'rb') as f:
+                    print(f'Loading {title} from cache...')
+                    return pickle.load(f)
+            else:
+                result = func(self, *args, **kwargs)
+                os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+                with open(cache_path, 'wb') as f:
+                    pickle.dump(result, f)
+                return result
+        return wrapper
+    return decorator
+
+
 class DataRetriever:
 
-    def __init__(self, quantities_path: str = 'quantities.csv', page_per_query: str = 10, workers: int = cpu_count()) -> None:
+    def __init__(self, quantities_path: str = 'quantities.csv', page_per_query: int = 10, workers: int = cpu_count()) -> None:
+        self.page_per_query = page_per_query
         self.__q = pd.read_csv(quantities_path)
-        self.__page_per_query = page_per_query
         self.__workers = workers
 
     @staticmethod
@@ -34,9 +54,10 @@ class DataRetriever:
         while True:
             try:
                 return func(*args, **kwargs)
-            except requests.exceptions.ConnectionError:
+            except (requests.exceptions.ConnectionError, wikipedia.exceptions.DisambiguationError):
                 time.sleep(1)
 
+    @filecache('page names')
     def get_page_names(self) -> Set[str]:
         result = set()
         with ThreadPoolExecutor(max_workers=self.__workers) as executor:
@@ -46,8 +67,9 @@ class DataRetriever:
         return result
 
     def search_quantity(self, quantity: str) -> List[str]:
-        return self.__retry(wikipedia.search, quantity, results=self.__page_per_query)
+        return self.__retry(wikipedia.search, quantity, results=self.page_per_query)
 
+    @filecache('pages')
     def get_pages(self, names: Set[str]) -> List[wikipedia.WikipediaPage]:
         result = []
         with ThreadPoolExecutor(max_workers=self.__workers) as executor:
