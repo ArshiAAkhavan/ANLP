@@ -116,7 +116,8 @@ class UnitRetriever:
 if __name__ == '__main__':
     import argparse
 
-    parser = argparse.ArgumentParser(description='Retrieve units from bahesab.ir')
+    parser = argparse.ArgumentParser(description='Retrieve units from bahesab.ir',
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--directory', '-d', type=str, default='./',
                         help='output directory path')
 
