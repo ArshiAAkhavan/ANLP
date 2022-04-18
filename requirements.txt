@@ -1,3 +1,4 @@
 pandas
 hazm
 bs4
+wikipedia
