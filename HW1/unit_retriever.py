@@ -1,10 +1,10 @@
 from dataclasses import dataclass
-from typing import List, Optional
+from functools import partial
+from typing import Callable, List, Tuple
 import requests
 import re
 
 from bs4 import BeautifulSoup
-from hazm import Normalizer
 import pandas as pd
 
 
@@ -36,16 +36,134 @@ class Quantity:
 class Unit:
     quantity: Quantity
     full_name: str
-    persian: str
-    english: Optional[str] = None
+    name: str
 
     @staticmethod
     def to_df(units: List['Unit']) -> pd.DataFrame:
         df = pd.DataFrame([
-            (unit.quantity.full_name, unit.quantity.id, unit.full_name, unit.persian, unit.english)
+            (unit.quantity.full_name, unit.quantity.id, unit.full_name, unit.name)
             for unit in units
-        ], columns=['QuantityName', 'QuantityId', 'UnitFullName', 'Persian', 'English'])
+        ], columns=['QuantityName', 'QuantityId', 'UnitFullName', 'UnitName'])
         return df
+
+
+class Normalizer:
+    Converter = Callable[[str], str]
+    delimiter = r'(\\u200c|\\s*)'
+    prefixes = [
+        'یوتا',
+        'زتا',
+        'اگزا',
+        'پتا',
+        'ترا',
+        'گیگا',
+        'مگا',
+        'کیلو',
+        'هکتو',
+        'دکا',
+        'یونی',
+        'دسی',
+        'سانتی',
+        'میلی',
+        'میکرو',
+        'نانو',
+        'پیکو',
+        'فمتو',
+        'آتو',
+        'زپتو',
+        'یوکتو',
+        'متر',
+        'مایل',
+        'nautical',
+        'فرسنگ',
+        'فرسخ',
+        'سال',
+        'light',
+        'ثانیه',
+        'واحد',
+        'شعاع',
+        'solar',
+        'اونس',
+        'من',
+        'اینچ',
+        'فوت',
+        'اتمسفر',
+        'پوندال',
+        'پوند',
+        'بر',
+        'نیوتن',
+        'گرم',
+        'تن',
+        'گالن',
+        'یارد',
+        'بشکه',
+        'نفت',
+        'وات',
+        'اسب',
+        'لیتر',
+        'الکترون',
+        'ترم',
+        'ژول',
+        'کالری',
+        'ارگ',
+        'BTU',
+        'ماه',
+        'اسلاگ',
+        'بوشل',
+        'دور',
+        'دقیقه',
+        'مجذور',
+        'نات',
+        'سیسی',
+        'مکعب',
+        'مربع',
+        'آمریکایی',
+        'کیبی',
+        'مبی',
+        'گیبی',
+        'تبی',
+        'پبی',
+        'بیت',
+        'بایت',
+    ]
+    replacements = [
+        ('سیسی', r'سی\Dسی'),
+        ('بشکه-', r'بشکه\D'),
+        ('تیانتی', r'تی\Dان\Dتی'),
+        ('tonofTNT', r'ton\Dof\DTNT'),
+
+    ]
+    def __init__(self) -> None:
+        self.__handle_prefix = self.__converter(rf'(?P<prefix>(^|\W)({"|".join(self.prefixes)}))(?P<suffix>\w+.*)$',
+                                                rf'\g<prefix>{self.delimiter}\g<suffix>')
+        self.__handle_replacements = self.__replacer(self.replacements)
+
+    @staticmethod
+    def __convert(pattern: re.Pattern, repl: str, text: str) -> str:
+        while (newtext := pattern.sub(repl, text)) != text:
+            text = newtext
+        return text
+
+    @classmethod
+    def __converter(cls, pattern: str, repl: str) -> 'Normalizer.Converter':
+        return partial(cls.__convert, re.compile(pattern, re.IGNORECASE), repl)
+
+    @classmethod
+    def __replacer(cls, replacements: List[Tuple[str, str]]) -> 'Normalizer.Converter':
+        replacements: List[Tuple[re.Pattern, str]] = [
+            (re.compile(pattern, re.IGNORECASE), repl.replace(r'\D', cls.delimiter))
+            for pattern, repl in replacements
+        ]
+        def replacer(text: str) -> str:
+            for pattern, repl in replacements:
+                text = pattern.sub(repl, text)
+            return text
+        return replacer
+
+    def normalize(self, text: str) -> str:
+        text = self.__handle_prefix(text)
+        text = self.__handle_replacements(text)
+        return text
 
 
 class UnitRetriever:
@@ -55,14 +173,15 @@ class UnitRetriever:
         self.__session.headers.update({
             'User-Agent': 'Mozilla/5.0',
         })
-        self.__pattern = re.compile(r'^([^()]+)(\((.+)\))?$')
-        self.__normalizer = Normalizer(token_based=True)
+        self.__first_pattern = re.compile(r'^([^()]*[^()\s])')
+        self.__other_pattern = re.compile(r'\s*\(([^()]*[^()\s])\)')
+        self.__normalizer = Normalizer()
 
     def __get_quantities(self) -> List[Quantity]:
         r = self.__session.get('https://www.bahesab.ir/calc/unit/')
         if r.status_code != 200:
             raise Exception('Failed to get quantities from https://www.bahesab.ir/calc/unit/')
-        soup = BeautifulSoup(r.text).select('select.select1 > option')
+        soup = BeautifulSoup(r.text, features='lxml').select('select.select1 > option')
         return [Quantity(item.get_text(), item['value']) for item in soup]
 
     def __get_units(self, quantity: Quantity) -> List[Unit]:
@@ -75,14 +194,22 @@ class UnitRetriever:
         if r.status_code != 200:
             raise Exception('Failed to get units from https://www.bahesab.ir/cdn/unit/')
 
-        soup = BeautifulSoup(r.json()['v']).select('option')
+        soup = BeautifulSoup(r.json()['v'], features='lxml').select('option')
         values = [o['value'] for o in soup]
         units = []
-        for unit in values:
-            unit = self.__normalizer.normalize(unit)
+        for unit_fullname in values:
 
-            mo = self.__pattern.match(unit)
-            units.append(Unit(quantity, unit, mo.group(1), mo.group(3)))
+            first = self.__first_pattern.match(unit_fullname).group(1)
+            units.append(Unit(quantity, unit_fullname, self.__normalizer.normalize(first)))
+
+            if first == 'فوت':
+                ###### TOFF ######
+                others = self.__other_pattern.findall(unit_fullname)[0].split('-')
+            else:
+                others = self.__other_pattern.findall(unit_fullname)
+
+            units += [Unit(quantity, unit_fullname, self.__normalizer.normalize(other)) for other in others]
+
         return units
 
     def retrieve(self) -> List[Unit]:
