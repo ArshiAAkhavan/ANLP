@@ -8,7 +8,7 @@ from hazm import Normalizer
 import pandas as pd
 
 
-"""
+'''
 TODO: convert
 
 request:
@@ -24,8 +24,7 @@ body: string_o: {"a":2,"b":"unit.quantity.id","c":"source_unit.full_name","d":"t
 
 response: {"status":200,"v":"0.001"}
 
-"""
-
+'''
 
 @dataclass
 class Quantity:
@@ -41,63 +40,43 @@ class Unit:
     english: Optional[str] = None
 
     @staticmethod
-    def to_df(units: List["Unit"]) -> pd.DataFrame:
-        df = pd.DataFrame(
-            [
-                (
-                    unit.quantity.full_name,
-                    unit.quantity.id,
-                    unit.full_name,
-                    unit.persian,
-                    unit.english,
-                )
-                for unit in units
-            ],
-            columns=[
-                "QuantityName",
-                "QuantityId",
-                "UnitFullName",
-                "Persian",
-                "English",
-            ],
-        )
+    def to_df(units: List['Unit']) -> pd.DataFrame:
+        df = pd.DataFrame([
+            (unit.quantity.full_name, unit.quantity.id, unit.full_name, unit.persian, unit.english)
+            for unit in units
+        ], columns=['QuantityName', 'QuantityId', 'UnitFullName', 'Persian', 'English'])
         return df
 
 
 class UnitRetriever:
+
     def __init__(self) -> None:
         self.__session = requests.session()
-        self.__session.headers.update(
-            {
-                "User-Agent": "Mozilla/5.0",
-            }
-        )
-        self.__pattern = re.compile(r"^([^()]+)(\((.+)\))?$")
+        self.__session.headers.update({
+            'User-Agent': 'Mozilla/5.0',
+        })
+        self.__pattern = re.compile(r'^([^()]+)(\((.+)\))?$')
         self.__normalizer = Normalizer(token_based=True)
 
     def __get_quantities(self) -> List[Quantity]:
-        r = self.__session.get("https://www.bahesab.ir/calc/unit/")
+        r = self.__session.get('https://www.bahesab.ir/calc/unit/')
         if r.status_code != 200:
-            raise Exception(
-                "Failed to get quantities from https://www.bahesab.ir/calc/unit/"
-            )
-        soup = BeautifulSoup(r.text).select("select.select1 > option")
-        return [Quantity(item.get_text(), item["value"]) for item in soup]
+            raise Exception('Failed to get quantities from https://www.bahesab.ir/calc/unit/')
+        soup = BeautifulSoup(r.text).select('select.select1 > option')
+        return [Quantity(item.get_text(), item['value']) for item in soup]
 
     def __get_units(self, quantity: Quantity) -> List[Unit]:
         data = {
-            "string_o": f'{{"a":1,"b":"{quantity.id}","c":0,"d":0,"e":0}}',
+            'string_o': f'{{"a":1,"b":"{quantity.id}","c":0,"d":0,"e":0}}',
         }
-        r = self.__session.post(
-            "https://www.bahesab.ir/cdn/unit/",
-            data=data,
-            headers=dict(referer="https://www.bahesab.ir/cdn/unit/"),
-        )
+        r = self.__session.post('https://www.bahesab.ir/cdn/unit/',
+                                data=data,
+                                headers=dict(referer='https://www.bahesab.ir/cdn/unit/'))
         if r.status_code != 200:
-            raise Exception("Failed to get units from https://www.bahesab.ir/cdn/unit/")
+            raise Exception('Failed to get units from https://www.bahesab.ir/cdn/unit/')
 
-        soup = BeautifulSoup(r.json()["v"]).select("option")
-        values = [o["value"] for o in soup]
+        soup = BeautifulSoup(r.json()['v']).select('option')
+        values = [o['value'] for o in soup]
         units = []
         for unit in values:
             unit = self.__normalizer.normalize(unit)
@@ -114,13 +93,12 @@ class UnitRetriever:
         return units
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import argparse
 
-    parser = argparse.ArgumentParser(description="Retrieve units from bahesab.ir")
-    parser.add_argument(
-        "--output", "-o", type=str, default="units.csv", help="output file name"
-    )
+    parser = argparse.ArgumentParser(description='Retrieve units from bahesab.ir')
+    parser.add_argument('--output', '-o', type=str, default='units.csv',
+                        help='output file name')
 
     args = parser.parse_args()
 
