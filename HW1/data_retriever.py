@@ -51,7 +51,7 @@ class DataRetriever:
     def get_pages(self, names: Set[str]) -> List[wikipedia.WikipediaPage]:
         result = []
         with ThreadPoolExecutor(max_workers=self.__workers) as executor:
-            futures = [executor.submit(self.__retry, wikipedia.WikipediaPage, name) for name in list(names)]
+            futures = [executor.submit(self.__retry, wikipedia.page, name) for name in list(names)]
             for future in tqdm(as_completed(futures), total=len(futures), desc='Getting pages...'):
                 result.append(future.result())
         return result
