@@ -48,7 +48,7 @@ class Unit:
         return df
 
 
-class Normalizer:
+class UnitNormalizer:
     Converter = Callable[[str], str]
     def __init__(self, conf_path: str = 'unit_normalization_conf.json') -> None:
         conf = self.__load_conf(conf_path)
@@ -71,10 +71,10 @@ class Normalizer:
         return text
 
     @classmethod
-    def __converter(cls, pattern: str, repl: str) -> 'Normalizer.Converter':
+    def __converter(cls, pattern: str, repl: str) -> 'UnitNormalizer.Converter':
         return partial(cls.__convert, re.compile(pattern, re.IGNORECASE), repl)
 
-    def __replacer(self, replacements: List[Tuple[str, str]]) -> 'Normalizer.Converter':
+    def __replacer(self, replacements: List[Tuple[str, str]]) -> 'UnitNormalizer.Converter':
         replacements: List[Tuple[re.Pattern, str]] = [
             (re.compile(pattern, re.IGNORECASE), repl.replace(r'\D', self.__delimiter))
             for pattern, repl in replacements
@@ -100,7 +100,7 @@ class UnitRetriever:
         })
         self.__first_pattern = re.compile(r'^([^()]*[^()\s])')
         self.__other_pattern = re.compile(r'\s*\(([^()]*[^()\s])\)')
-        self.__normalizer = Normalizer()
+        self.__unit_normalizer = UnitNormalizer()
 
     def __get_quantities(self) -> List[Quantity]:
         r = self.__session.get('https://www.bahesab.ir/calc/unit/')
@@ -125,7 +125,7 @@ class UnitRetriever:
         for unit_fullname in values:
 
             first = self.__first_pattern.match(unit_fullname).group(1)
-            units.append(Unit(quantity, unit_fullname, self.__normalizer.normalize(first)))
+            units.append(Unit(quantity, unit_fullname, self.__unit_normalizer.normalize(first)))
 
             if first == 'فوت':
                 ###### TOFF ######
@@ -133,7 +133,7 @@ class UnitRetriever:
             else:
                 others = self.__other_pattern.findall(unit_fullname)
 
-            units += [Unit(quantity, unit_fullname, self.__normalizer.normalize(other)) for other in others]
+            units += [Unit(quantity, unit_fullname, self.__unit_normalizer.normalize(other)) for other in others]
 
         return units
 
