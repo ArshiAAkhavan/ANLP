@@ -51,11 +51,17 @@ class DataRetriever:
 
     @staticmethod
     def __retry(func, *args, **kwargs):
+        retries = 0
         while True:
             try:
                 return func(*args, **kwargs)
-            except (requests.exceptions.ConnectionError, wikipedia.exceptions.DisambiguationError):
+            except requests.exceptions.ConnectionError:
+                if retries > 4:
+                    return None
                 time.sleep(1)
+                retries += 1
+            except Exception as e:
+                return None
 
     @filecache('page names')
     def get_page_names(self) -> Set[str]:
@@ -75,7 +81,8 @@ class DataRetriever:
         with ThreadPoolExecutor(max_workers=self.__workers) as executor:
             futures = [executor.submit(self.__retry, wikipedia.page, name) for name in list(names)]
             for future in tqdm(as_completed(futures), total=len(futures), desc='Getting pages...'):
-                result.append(future.result())
+                if p := future.result():
+                    result.append(p)
         return result
 
     @staticmethod
@@ -88,7 +95,8 @@ class DataRetriever:
         with ThreadPoolExecutor(max_workers=self.__workers) as executor:
             futures = [executor.submit(self.__retry, self.get_document, page) for page in pages]
             for future in tqdm(as_completed(futures), total=len(futures), desc='Retrieving documents...'):
-                yield future.result()
+                if doc := future.result():
+                    yield doc
 
 
 if __name__ == '__main__':
