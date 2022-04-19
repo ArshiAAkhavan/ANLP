@@ -40,8 +40,8 @@ class Quantity:
             [(q.id, name) for name in q.names] for q in quantities
         ], []), columns=['id', 'name'])
         u_df = pd.DataFrame(sum([
-            [(q.id, u.full_name) for u in q.units] for q in quantities
-        ], []), columns=['qid', 'id'])
+            [(q.id, u.full_name, u.conversion_unit.full_name, u.conversion_factor) for u in q.units] for q in quantities
+        ], []), columns=['qid', 'id', 'conversion_uid', 'conversion_factor'])
         u_names_df = pd.DataFrame(sum([
             [(u.full_name, name) for name in u.names] for u in sum([q.units for q in quantities], [])
         ], []), columns=['uid', 'name'])
@@ -52,14 +52,11 @@ class Quantity:
 class Unit:
     full_name: str
     names: List[str] = field(default_factory=list)
+    conversion_unit: 'Unit' = field(init=False)
+    conversion_factor: float = 1.0
 
-    @staticmethod
-    def to_df(units: List['Unit']) -> pd.DataFrame:
-        df = pd.DataFrame([
-            (unit.quantity.full_name, unit.quantity.id, unit.full_name, unit.name)
-            for unit in units
-        ], columns=['QuantityName', 'QuantityId', 'UnitFullName', 'UnitName'])
-        return df
+    def __post_init__(self) -> None:
+        self.conversion_unit = self
 
 
 class UnitRetriever:
@@ -90,6 +87,23 @@ class UnitRetriever:
         soup = BeautifulSoup(r.text, features='lxml').select('select.select1 > option')
         return [Quantity(self.__split_names(item.get_text()), item['value']) for item in soup]
 
+    def __set_conversion_factor(self, quantity: Quantity, unit: Unit) -> None:
+        if len(quantity.units) == 0:
+            return
+
+        conversion_unit = quantity.units[0]
+        data = {
+            'string_o': f'{{"a":2,"b":"{quantity.id}","c":"{conversion_unit.full_name}","d":"{unit.full_name}","e":"1"}}',
+        }
+        r = self.__session.post('https://www.bahesab.ir/cdn/unit/',
+                                data=data,
+                                headers=dict(referer='https://www.bahesab.ir/cdn/unit/'))
+        if r.status_code != 200:
+            raise Exception('Failed to get conversion factor from https://www.bahesab.ir/cdn/unit/')
+
+        unit.conversion_unit = conversion_unit
+        unit.conversion_factor = float(r.json()['v'])
+
     def __set_units(self, quantity: Quantity) -> None:
         data = {
             'string_o': f'{{"a":1,"b":"{quantity.id}","c":0,"d":0,"e":0}}',
@@ -104,6 +118,7 @@ class UnitRetriever:
         values = [o['value'] for o in soup]
         for unit_fullname in values:
             unit = Unit(unit_fullname, [self.__unit_normalizer.normalize(name) for name in self.__split_names(unit_fullname)])
+            self.__set_conversion_factor(quantity, unit)
             quantity.units.append(unit)
 
     def retrieve(self) -> List[Quantity]:
@@ -126,6 +141,7 @@ if __name__ == '__main__':
     quantities = UnitRetriever().retrieve()
     q_df, u_df, u_names_df = Quantity.to_dfs(quantities)
 
+    os.makedirs(args.directory, exist_ok=True)
     q_df.to_csv(os.path.join(args.directory, 'quantities.csv'), index=False)
     u_df.to_csv(os.path.join(args.directory, 'units.csv'), index=False)
     u_names_df.to_csv(os.path.join(args.directory, 'unit_names.csv'), index=False)
