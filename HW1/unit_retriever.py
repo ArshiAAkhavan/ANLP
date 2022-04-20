@@ -10,24 +10,6 @@ import pandas as pd
 from unit_normalizer import UnitNormalizer
 
 
-'''
-TODO: convert
-
-request:
-fetch("https://www.bahesab.ir/cdn/unit/", {
-  "headers": {
-    "Referer": "https://www.bahesab.ir/calc/unit/",
-  },
-  "body": "string_o=%7B%22a%22%3A2%2C%22b%22%3A%22length%22%2C%22c%22%3A%22%D9%85%D8%AA%D8%B1(m)%22%2C%22d%22%3A%22%DA%A9%DB%8C%D9%84%D9%88%D9%85%D8%AA%D8%B1(km)%22%2C%22e%22%3A%221%22%7D",
-  "method": "POST"
-});
-
-body: string_o: {"a":2,"b":"unit.quantity.id","c":"source_unit.full_name","d":"target_unit.full_name","e":"1"}
-
-response: {"status":200,"v":"0.001"}
-
-'''
-
 @dataclass
 class Quantity:
     names: List[str]
@@ -40,8 +22,8 @@ class Quantity:
             [(q.id, name) for name in q.names] for q in quantities
         ], []), columns=['id', 'name'])
         u_df = pd.DataFrame(sum([
-            [(q.id, u.full_name, u.conversion_unit.full_name, u.conversion_factor) for u in q.units] for q in quantities
-        ], []), columns=['qid', 'id', 'conversion_uid', 'conversion_factor'])
+            [(q.id, u.full_name, u.conversion_factor) for u in q.units] for q in quantities
+        ], []), columns=['qid', 'id', 'conversion_factor'])
         u_names_df = pd.DataFrame(sum([
             [(u.full_name, name) for name in u.names] for u in sum([q.units for q in quantities], [])
         ], []), columns=['uid', 'name'])
@@ -52,11 +34,7 @@ class Quantity:
 class Unit:
     full_name: str
     names: List[str] = field(default_factory=list)
-    conversion_unit: 'Unit' = field(init=False)
     conversion_factor: float = 1.0
-
-    def __post_init__(self) -> None:
-        self.conversion_unit = self
 
 
 class UnitRetriever:
@@ -91,9 +69,8 @@ class UnitRetriever:
         if len(quantity.units) == 0:
             return
 
-        conversion_unit = quantity.units[0]
         data = {
-            'string_o': f'{{"a":2,"b":"{quantity.id}","c":"{conversion_unit.full_name}","d":"{unit.full_name}","e":"1"}}',
+            'string_o': f'{{"a":2,"b":"{quantity.id}","c":"{quantity.units[0].full_name}","d":"{unit.full_name}","e":"1"}}',
         }
         r = self.__session.post('https://www.bahesab.ir/cdn/unit/',
                                 data=data,
@@ -101,7 +78,6 @@ class UnitRetriever:
         if r.status_code != 200:
             raise Exception('Failed to get conversion factor from https://www.bahesab.ir/cdn/unit/')
 
-        unit.conversion_unit = conversion_unit
         unit.conversion_factor = float(r.json()['v'])
 
     def __set_units(self, quantity: Quantity) -> None:
