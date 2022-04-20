@@ -1,6 +1,7 @@
 import re
 from typing import List, Set
 
+import pandas as pd
 from parsi_io.modules.number_extractor import NumberExtractor
 from unit_extractor.consts import (ADVERB_TRASH_MAGIC, ITEM_GROUP_NAME,
                                    NUMBER_GROUP_NAME, NUMBER_TRASH_MAGIC,
@@ -9,7 +10,14 @@ from unit_extractor.consts import (ADVERB_TRASH_MAGIC, ITEM_GROUP_NAME,
                                    UNIT_TRASH_MAGIC, pattern_regex,
                                    unit_overlap_regex)
 from unit_extractor.output import RawOutput, ValidOutput
-from unit_retriever import UnitRetriever
+from unit_retriever import UnitRetriever, Quantity
+
+
+def read_quantities() -> List[Quantity]:
+    q = pd.read_csv('quantities.csv')
+    u = pd.read_csv('units.csv')
+    u_names = pd.read_csv('unit_names.csv')
+    return Quantity.from_dfs(q, u, u_names)
 
 
 class UnitExtractor:

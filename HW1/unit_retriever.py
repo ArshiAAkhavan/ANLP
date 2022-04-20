@@ -18,16 +18,28 @@ class Quantity:
 
     @staticmethod
     def to_dfs(quantities: List['Quantity']) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-        q_df = pd.DataFrame(sum([
+        q = pd.DataFrame(sum([
             [(q.id, name) for name in q.names] for q in quantities
         ], []), columns=['id', 'name'])
-        u_df = pd.DataFrame(sum([
+        u = pd.DataFrame(sum([
             [(q.id, u.full_name, u.conversion_factor) for u in q.units] for q in quantities
         ], []), columns=['qid', 'id', 'conversion_factor'])
-        u_names_df = pd.DataFrame(sum([
+        u_names = pd.DataFrame(sum([
             [(u.full_name, name) for name in u.names] for u in sum([q.units for q in quantities], [])
         ], []), columns=['uid', 'name'])
-        return q_df, u_df, u_names_df
+        return q, u, u_names
+
+    @staticmethod
+    def from_dfs(q: pd.DataFrame, u: pd.DataFrame, u_names: pd.DataFrame) -> List['Quantity']:
+        return [Quantity(
+            [name for name in q[q.id == qid].name.values],
+            qid,
+            units=[Unit(
+                uid,
+                names=[name for name in u_names[u_names.uid == uid].name.values],
+                conversion_factor=cf
+            ) for uid, cf in u.loc[u.qid == qid, ['id', 'conversion_factor']].values]
+        ) for qid in q.id.unique()]
 
 
 @dataclass
@@ -115,9 +127,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     quantities = UnitRetriever().retrieve()
-    q_df, u_df, u_names_df = Quantity.to_dfs(quantities)
+    q, u, u_names = Quantity.to_dfs(quantities)
 
     os.makedirs(args.directory, exist_ok=True)
-    q_df.to_csv(os.path.join(args.directory, 'quantities.csv'), index=False)
-    u_df.to_csv(os.path.join(args.directory, 'units.csv'), index=False)
-    u_names_df.to_csv(os.path.join(args.directory, 'unit_names.csv'), index=False)
+    q.to_csv(os.path.join(args.directory, 'quantities.csv'), index=False)
+    u.to_csv(os.path.join(args.directory, 'units.csv'), index=False)
+    u_names.to_csv(os.path.join(args.directory, 'unit_names.csv'), index=False)
