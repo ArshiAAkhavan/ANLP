@@ -16,30 +16,30 @@ from unit_extractor.consts import (
     unit_overlap_regex,
 )
 from unit_extractor.output import RawOutput, ValidOutput
-from unit_retriever import UnitRetriever, Quantity
 
 
-def read_quantities() -> List[Quantity]:
-    q = pd.read_csv("quantities.csv")
-    u = pd.read_csv("units.csv")
-    u_names = pd.read_csv("unit_names.csv")
-    return Quantity.from_dfs(q, u, u_names)
+class UnitPatternEscaper:
+    pattern = re.compile(r'\([^\)]+\)')
+
+    def __call__(self, unit_name: str) -> str:
+        return self.pattern.sub('', unit_name)
 
 
 class UnitExtractor:
     def __init__(self):
         self.num_extractor = NumberExtractor()
-        self.quantites = UnitRetriever().retrieve()
+        self.unit_pattern_escaper = UnitPatternEscaper()
 
-        unit_names = []
-        for q in self.quantites:
-            for unit in q.units:
-                unit_names.extend(unit.names)
+        self.q_df = pd.read_csv("quantities.csv")
+        self.u_df = pd.read_csv("units.csv")
+        self.uname_df = pd.read_csv("unit_names.csv")
+
+        unit_names = self.uname_df['name'].tolist()
+        unit_names.sort(key=lambda x: len(self.unit_pattern_escaper(x)), reverse=True)
         self.unit_regex = re.compile(f'({"|".join(unit_names)})')
 
-        quantifiers = []
-        for q in self.quantites:
-            quantifiers.extend(q.names)
+        quantifiers = self.q_df['name'].tolist()
+        quantifiers.sort(key=len, reverse=True)
         self.quantifier_regex = re.compile(f'({"|".join(quantifiers)})')
 
         adverbs = ["زیاد", "کم"]
@@ -144,12 +144,17 @@ class UnitExtractor:
         return results
 
     def get_quantity_from_unit(self, unit_name: str) -> str:
-        for q in self.quantites:
-            for u in q.units:
-                for regex in u.names:
-                    if re.match(regex, unit_name):
-                        return q.names[0]
-        return ""
+        if not unit_name:
+            return ''
+
+        uid = self.uname_df[self.uname_df['name'].apply(lambda regex: re.match(rf'^{regex}$', unit_name) is not None)]['uid'].tolist()
+        assert len(uid) == 1, f'{unit_name}'
+        uid = uid[0]
+        qid = self.u_df[self.u_df['id'] == uid]['qid'].tolist()
+        assert len(qid) == 1
+        qid = qid[0]
+        qnames = self.q_df[self.q_df['id'] == qid]['name'].tolist()
+        return qnames[0]
 
     def run(self, matn: str) -> List[ValidOutput]:
         m1 = self._tag_numbers(matn)
