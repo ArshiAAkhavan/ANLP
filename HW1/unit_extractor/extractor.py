@@ -3,20 +3,26 @@ from typing import List, Set
 
 import pandas as pd
 from parsi_io.modules.number_extractor import NumberExtractor
-from unit_extractor.consts import (ADVERB_TRASH_MAGIC, ITEM_GROUP_NAME,
-                                   NUMBER_GROUP_NAME, NUMBER_TRASH_MAGIC,
-                                   QUANTIFIER_GROUP_NAME,
-                                   QUANTIFIER_TRASH_MAGIC, UNIT_GROUP_NAME,
-                                   UNIT_TRASH_MAGIC, pattern_regex,
-                                   unit_overlap_regex)
+from unit_extractor.consts import (
+    ADVERB_TRASH_MAGIC,
+    ITEM_GROUP_NAME,
+    NUMBER_GROUP_NAME,
+    NUMBER_TRASH_MAGIC,
+    QUANTIFIER_GROUP_NAME,
+    QUANTIFIER_TRASH_MAGIC,
+    UNIT_GROUP_NAME,
+    UNIT_TRASH_MAGIC,
+    pattern_regex,
+    unit_overlap_regex,
+)
 from unit_extractor.output import RawOutput, ValidOutput
 from unit_retriever import UnitRetriever, Quantity
 
 
 def read_quantities() -> List[Quantity]:
-    q = pd.read_csv('quantities.csv')
-    u = pd.read_csv('units.csv')
-    u_names = pd.read_csv('unit_names.csv')
+    q = pd.read_csv("quantities.csv")
+    u = pd.read_csv("units.csv")
+    u_names = pd.read_csv("unit_names.csv")
     return Quantity.from_dfs(q, u, u_names)
 
 
@@ -111,13 +117,13 @@ class UnitExtractor:
     ) -> List[ValidOutput]:
         results = []
         for raw in raw_outputs:
-            unit = matn[raw.unit[0]: raw.unit[1]] if raw.unit else ""
-            quan = matn[raw.quan[0]: raw.quan[1]] if raw.quan else ""
-            item = matn[raw.item[0]: raw.item[1]] if raw.item else ""
-            marker = matn[raw.span[0]: raw.span[1]]
+            unit = matn[raw.unit[0] : raw.unit[1]] if raw.unit else ""
+            quan = matn[raw.quan[0] : raw.quan[1]] if raw.quan else ""
+            item = matn[raw.item[0] : raw.item[1]] if raw.item else ""
+            marker = matn[raw.span[0] : raw.span[1]]
 
             if raw.amount:
-                amount_raw = matn[raw.amount[0]: raw.amount[1]]
+                amount_raw = matn[raw.amount[0] : raw.amount[1]]
                 amount = self.num_extractor.run(amount_raw)[0]["value"]
             else:
                 amount = ""
@@ -153,4 +159,3 @@ class UnitExtractor:
         raw_outputs = self._extract_patterns(m4)
         valid_outputs = self._generate_outputs(matn, raw_outputs)
         return valid_outputs
-
