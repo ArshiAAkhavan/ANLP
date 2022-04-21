@@ -23,13 +23,17 @@ def read_quantities() -> List[Quantity]:
 class UnitExtractor:
     def __init__(self):
         self.num_extractor = NumberExtractor()
-        self.units = UnitRetriever().retrieve()
+        self.quantites = UnitRetriever().retrieve()
 
-        unit_names = [unit.persian.strip() for unit in self.units]
+        unit_names = []
+        for q in self.quantites:
+            for unit in q.units:
+                unit_names.extend(unit.names)
         self.unit_regex = re.compile(f'({"|".join(unit_names)})')
 
-        # TODO: retrevie it from ahmad
-        quantifiers = ["سرعت", "جرم", "طول"]
+        quantifiers = []
+        for q in self.quantites:
+            quantifiers.extend(q.names)
         self.quantifier_regex = re.compile(f'({"|".join(quantifiers)})')
 
         adverbs = ["زیاد", "کم"]
@@ -118,12 +122,12 @@ class UnitExtractor:
             else:
                 amount = ""
 
-            quantity = (self.get_quantity_from_unit(unit),)
+            quantity = self.get_quantity_from_unit(unit)
             if not quantity or len(quantity) == 0:
                 quantity = quan
 
             o = ValidOutput(
-                quantity=quan,
+                quantity=quantity,
                 unit=unit,
                 amount=amount,
                 item=item,
@@ -134,9 +138,11 @@ class UnitExtractor:
         return results
 
     def get_quantity_from_unit(self, unit_name: str) -> str:
-        for unit in self.units:
-            if unit.persian.strip() == unit_name.strip():
-                return unit.quantity.full_name
+        for q in self.quantites:
+            for u in q.units:
+                for regex in u.names:
+                    if re.match(regex, unit_name):
+                        return q.names[0]
         return ""
 
     def run(self, matn: str) -> List[ValidOutput]:
@@ -147,3 +153,4 @@ class UnitExtractor:
         raw_outputs = self._extract_patterns(m4)
         valid_outputs = self._generate_outputs(matn, raw_outputs)
         return valid_outputs
+
