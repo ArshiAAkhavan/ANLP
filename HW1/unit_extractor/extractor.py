@@ -148,10 +148,9 @@ class UnitExtractor:
             return ''
 
         uid = self.uname_df[self.uname_df['name'].apply(lambda regex: re.match(rf'^{regex}$', unit_name) is not None)]['uid'].tolist()
-        assert len(uid) == 1, f'{unit_name}'
+        assert uid, f'{uid} {unit_name}'
         uid = uid[0]
         qid = self.u_df[self.u_df['id'] == uid]['qid'].tolist()
-        assert len(qid) == 1
         qid = qid[0]
         qnames = self.q_df[self.q_df['id'] == qid]['name'].tolist()
         return qnames[0]
