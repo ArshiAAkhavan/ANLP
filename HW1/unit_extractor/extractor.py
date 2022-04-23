@@ -1,5 +1,6 @@
 import re
 from typing import List, Set
+import warnings
 
 import pandas as pd
 from parsi_io.modules.number_extractor import NumberExtractor
@@ -16,13 +17,7 @@ from unit_extractor.consts import (
     unit_overlap_regex,
 )
 from unit_extractor.output import RawOutput, ValidOutput
-
-
-class UnitPatternEscaper:
-    pattern = re.compile(r'\([^\)]+\)')
-
-    def __call__(self, unit_name: str) -> str:
-        return self.pattern.sub('', unit_name)
+from unit_retriever import UnitPatternEscaper
 
 
 class UnitExtractor:
@@ -148,7 +143,10 @@ class UnitExtractor:
             return ''
 
         uid = self.uname_df[self.uname_df['name'].apply(lambda regex: re.match(rf'^{regex}$', unit_name) is not None)]['uid'].tolist()
-        assert uid, f'{uid} {unit_name}'
+        if not uid:
+            warnings.warn(f'Unit name "{unit_name}" not found in unit_names.csv')
+            return ''
+
         uid = uid[0]
         qid = self.u_df[self.u_df['id'] == uid]['qid'].tolist()
         qid = qid[0]

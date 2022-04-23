@@ -68,7 +68,10 @@ class UnitRetriever:
             others = cls.__other_pattern.findall(fullname)[0].split('-')
         else:
             others = cls.__other_pattern.findall(fullname)
-        return [first] + others
+        result = [first] + others
+        if 'سانتیگراد' in result:
+            result.append('درجهسانتیگراد')
+        return result
 
     def __get_quantities(self) -> List[Quantity]:
         r = self.__session.get('https://www.bahesab.ir/calc/unit/')
@@ -116,6 +119,49 @@ class UnitRetriever:
         return quantities
 
 
+class UnitPatternEscaper:
+    pattern = re.compile(r'\([^\)]+\)')
+
+    def __call__(self, unit_name: str) -> str:
+        return self.pattern.sub('', unit_name)
+
+
+def is_persian_char(char: str) -> bool:
+    return ord('؀') <= ord(char) <= ord('ۿ')
+
+
+class PrefixPrepender:
+
+    def __init__(self, u_df: pd.DataFrame, uname_df: pd.DataFrame) -> None:
+        self.unit_pattern_escaper = UnitPatternEscaper()
+        self.unit_normalizer = UnitNormalizer()
+        is_prefix = uname_df['uid'].isin(u_df[u_df['qid'] == 'pishvand']['id'])
+        self.uname_df = uname_df[uname_df['name'].str[0].apply(is_persian_char) & ~is_prefix]
+        self.puname_df = uname_df[uname_df['name'].str[0].apply(is_persian_char) & is_prefix]
+        self.uid_by_name = {self.unit_pattern_escaper(name): uid for uid, name in self.uname_df.itertuples(index=False)}
+        self.q_by_uid = {uid: (qid, cfactor) for qid, uid, cfactor in u_df.itertuples(index=False)}
+        self.prefix_regex = re.compile(rf'^({"|".join(self.puname_df["name"].values)})')
+
+    def prepend(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        extra_u = dict(qid=[], id=[], conversion_factor=[])
+        extra_uname = dict(uid=[], name=[])
+        for uid, name in self.uname_df.itertuples(index=False):
+            for puid, pname in self.puname_df.itertuples(index=False):
+                if self.prefix_regex.match(name) is None and (new_uname := self.unit_pattern_escaper(f'{pname}{name}')) not in self.uid_by_name:
+                    new_uname = self.unit_normalizer.normalize(new_uname)
+                    new_uid = f'{uid}-{puid}'
+                    qid, cfactor = self.q_by_uid[uid]
+                    new_cfactor = self.q_by_uid[puid][1] / self.q_by_uid['یونی(u)'][1] * cfactor
+                    extra_u['qid'].append(qid)
+                    extra_u['id'].append(new_uid)
+                    extra_u['conversion_factor'].append(new_cfactor)
+                    extra_uname['uid'].append(new_uid)
+                    extra_uname['name'].append(new_uname)
+        u_df = pd.DataFrame(extra_u)
+        uname_df = pd.DataFrame(extra_uname)
+        return u_df, uname_df
+
+
 if __name__ == '__main__':
     import argparse
 
@@ -123,11 +169,18 @@ if __name__ == '__main__':
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--directory', '-d', type=str, default='./',
                         help='output directory path')
+    parser.add_argument('--no-prepend', action='store_true',
+                        help='do not prepend prefixes')
 
     args = parser.parse_args()
 
     quantities = UnitRetriever().retrieve()
     q, u, u_names = Quantity.to_dfs(quantities)
+
+    if not args.no_prepend:
+        u_df, u_names_df = PrefixPrepender(u, u_names).prepend()
+        u = pd.concat([u, u_df], sort=False)
+        u_names = pd.concat([u_names, u_names_df], sort=False)
 
     os.makedirs(args.directory, exist_ok=True)
     q.to_csv(os.path.join(args.directory, 'quantities.csv'), index=False)
