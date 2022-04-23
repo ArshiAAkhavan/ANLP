@@ -41,7 +41,12 @@ class UnitExtractor:
         self.adverb_regex = re.compile(f'({"|".join(adverbs)})')
 
     def _tag_numbers(self, matn: str) -> str:
-        for num in self.num_extractor.run(matn):
+        try:
+            numbers = self.num_extractor.run(matn)
+        except Exception as e:
+            warnings.warn(f'Number extraction failed: {e}')
+            return matn
+        for num in numbers:
             start = num["span"][0]
             end = num["span"][1]
             length = end - start

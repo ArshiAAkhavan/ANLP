@@ -4,6 +4,7 @@ from typing import List, Tuple
 import requests
 import re
 
+import regex
 from bs4 import BeautifulSoup
 import pandas as pd
 
@@ -120,7 +121,7 @@ class UnitRetriever:
 
 
 class UnitPatternEscaper:
-    pattern = re.compile(r'\([^\)]+\)')
+    pattern = regex.compile(r'(?V1)\((?:[^)(]+|(?R))*+\)') # https://stackoverflow.com/a/35271017/10635586
 
     def __call__(self, unit_name: str) -> str:
         return self.pattern.sub('', unit_name)
@@ -149,7 +150,7 @@ class PrefixPrepender:
             for puid, pname in self.puname_df.itertuples(index=False):
                 if self.prefix_regex.match(name) is None and (new_uname := self.unit_pattern_escaper(f'{pname}{name}')) not in self.uid_by_name:
                     new_uname = self.unit_normalizer.normalize(new_uname)
-                    new_uid = f'{uid}-{puid}'
+                    new_uid = f'{puid}-{uid}'
                     qid, cfactor = self.q_by_uid[uid]
                     new_cfactor = self.q_by_uid[puid][1] / self.q_by_uid['یونی(u)'][1] * cfactor
                     extra_u['qid'].append(qid)
