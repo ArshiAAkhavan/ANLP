@@ -20,7 +20,7 @@ item_regex = f"(?P<{ITEM_GROUP_NAME}>[\u0600-\u06ff]+)"
 quantity_regex = f"(?P<{QUANTIFIER_GROUP_NAME}>{QUANTIFIER_TRASH_MAGIC}+)"
 adverb_regex = f"(?P<{ADVERB_GROUP_NAME}>{ADVERB_TRASH_MAGIC}+)"
 stopword_regex = f"({STOP_TRASH_MAGIC}+)"
-stopword_optional_regex = f"({STOP_TRASH_MAGIC}*)"
+stopword_optional_regex = f"(\s+{STOP_TRASH_MAGIC}+\s+|\s+)"
 white_space_regex = r"(\s+)"
 
 
@@ -37,7 +37,7 @@ pattern_map = {
 
 patterns_raw = [
     "N U I",
-    "I s Q N U",
+    "IsQ N U",
     "Q N U",
     "Q A",
 ]
