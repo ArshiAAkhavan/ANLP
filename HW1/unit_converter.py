@@ -1,7 +1,7 @@
 import pandas as pd
 
-from HW1.unit_extractor.extractor import UnitExtractor
-from HW1.unit_extractor.output import ValidOutput
+from unit_extractor.extractor import UnitExtractor
+from unit_extractor.output import ValidOutput
 
 
 class UnitConverter:

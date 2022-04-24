@@ -1,5 +1,5 @@
 import re
-from typing import List, Set
+from typing import List, Set, Tuple
 import warnings
 from hazm import Normalizer
 import codecs
@@ -175,20 +175,24 @@ class UnitExtractor:
             results.append(o)
         return results
 
-    def get_quantity_from_unit(self, unit_name: str) -> str:
+    def get_quantity_and_proper_unit_from_unit_name(self, unit_name: str) -> Tuple[str, str, str]:
         if not unit_name:
-            return ''
+            return '', '', ''
 
-        uid = self.uname_df[self.uname_df['name'].apply(lambda regex: re.match(rf'^{regex}$', unit_name) is not None)]['uid'].tolist()
+        uid = self.uname_df[self.uname_df['name'].apply(lambda regex: re.match(rf'^{regex}$', unit_name) is not None)][
+            'uid'].tolist()
         if not uid:
             warnings.warn(f'Unit name "{unit_name}" not found in unit_names.csv')
-            return ''
+            return '', '', ''
 
         uid = uid[0]
         qid = self.u_df[self.u_df['id'] == uid]['qid'].tolist()
         qid = qid[0]
         qnames = self.q_df[self.q_df['id'] == qid]['name'].tolist()
-        return qnames[0]
+        return qnames[0], qid, uid
+
+    def get_quantity_from_unit(self, unit_name: str) -> str:
+        return self.get_quantity_and_proper_unit_from_unit_name(unit_name)[0]
 
     def run(self, matn: str) -> List[ValidOutput]:
         m1 = self._tag_numbers(matn)
