@@ -3,6 +3,7 @@ from typing import List, Set
 import warnings
 from hazm import Normalizer
 import codecs
+import logging
 
 import pandas as pd
 from parsi_io.modules.number_extractor import NumberExtractor
@@ -149,11 +150,16 @@ class UnitExtractor:
             item = matn[raw.item[0] : raw.item[1]] if raw.item else ""
             marker = matn[raw.span[0] : raw.span[1]]
 
-            if raw.amount:
-                amount_raw = matn[raw.amount[0] : raw.amount[1]]
-                amount = self.num_extractor.run(amount_raw)[0]["value"]
-            else:
+            try:
+                if raw.amount:
+                    amount_raw = matn[raw.amount[0] : raw.amount[1]]
+                    amount = self.num_extractor.run(amount_raw)[0]["value"]
+                else:
+                    amount = ""
+            except:
+                logging.warning(f"couldn't convert {amount_raw}...")
                 amount = ""
+                
 
             quantity = self.get_quantity_from_unit(unit)
             if not quantity or len(quantity) == 0:
