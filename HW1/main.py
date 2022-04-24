@@ -20,10 +20,21 @@ extractor = UnitExtractor()
 # pprint(results)
 # print()
 
-# matn = "شهاب سنگی به جرم ۱۰ کیلوگرم به زمین برخورد کرد"
-# results = extractor.run(matn)
-# pprint(results)
-# print()
+matn = "شهاب سنگی به جرم ۱۰ کیلوگرم به زمین برخورد کرد"
+results = extractor.run(matn)
+pprint(results)
+print()
+
+matn = "شهاب سنگی به تندی ۱۰ کیلوگرم به زمین برخورد کرد"
+results = extractor.run(matn)
+pprint(results)
+print()
+
+
+matn = "شهاب سنگی به تندی ۱۰ کیلومتر بر ثانیه به زمین برخورد کرد"
+results = extractor.run(matn)
+pprint(results)
+print()
 
 # matn = "یک خودرو با سرعت زیاد از ما سبقت گرفت"
 # results = extractor.run(matn)
