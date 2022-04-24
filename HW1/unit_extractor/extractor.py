@@ -158,7 +158,7 @@ class UnitExtractor:
                     amount = ""
             except:
                 logging.warning(f"couldn't convert {amount_raw}...")
-                amount = ""
+                continue
                 
 
             quantity = self.get_quantity_from_unit(unit)
