@@ -17,6 +17,7 @@ from unit_extractor.consts import (
     UNIT_GROUP_NAME,
     UNIT_TRASH_MAGIC,
     STOP_TRASH_MAGIC,
+    WORD_SURROUNDING_REGEX,
     pattern_regex,
     unit_overlap_regex,
 )
@@ -35,13 +36,13 @@ class UnitExtractor:
 
         unit_names = self.uname_df['name'].tolist()
         unit_names.sort(key=lambda x: len(self.unit_pattern_escaper(x)), reverse=True)
-        self.unit_regex = re.compile(f'({"|".join(unit_names)})')
+        self.unit_regex = re.compile(f'{WORD_SURROUNDING_REGEX}({"|".join(unit_names)}){WORD_SURROUNDING_REGEX}')
 
         quantifiers = self.q_df['name'].tolist()
         quantifiers.sort(key=len, reverse=True)
-        self.quantifier_regex = re.compile(f'({"|".join(quantifiers)})')
+        self.quantifier_regex = re.compile(f'{WORD_SURROUNDING_REGEX}({"|".join(quantifiers)}){WORD_SURROUNDING_REGEX}')
 
-        adverbs = ["بیسار سنگین","بسیار سبک","بسیار کم","بسیار زیاد","زیادی","کمی","بسیار","سبک","سنگین","زیاد", "کم"]
+        adverbs = ["بسیار سنگین","بسیار سبک","بسیار کم","بسیار زیاد","زیادی","کمی","بسیار","سبک","سنگین","زیاد", "کم"]
         self.adverb_regex = re.compile(f'({"|".join(adverbs)})')
 
         self.stopwords=[Normalizer().normalize(x.strip()) for x in codecs.open('stopwords.txt','r','utf-8').readlines()]
@@ -61,9 +62,9 @@ class UnitExtractor:
         return matn
 
     @staticmethod
-    def _tag_by_name(matn: str, regex, tag: str) -> str:
+    def _tag_by_name(matn: str, regex: re.Pattern, tag: str) -> str:
         for match in regex.finditer(matn):
-            span = match.span()
+            span = match.span(1)
             start = span[0]
             end = span[1]
             length = end - start
