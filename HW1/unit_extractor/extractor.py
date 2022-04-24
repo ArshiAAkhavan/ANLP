@@ -77,13 +77,11 @@ class UnitExtractor:
         return self._tag_by_name(matn, self.adverb_regex, ADVERB_TRASH_MAGIC)
     
     def _tag_stopwords(self, matn: str) -> str:
-        matn_splited=matn.split()
+        matn_splited=matn.split(" ")
         for i,word in enumerate(matn_splited):
             if word in self.stopwords:
                 matn_splited[i]=STOP_TRASH_MAGIC*len(word)
         return " ".join(matn_splited)
-        
-        # return self._tag_by_name(matn, self.stopword_regex, STOP_TRASH_MAGIC)
 
     def _tag_units(self, matn: str) -> str:
         matn = self._tag_by_name(matn, self.unit_regex, UNIT_TRASH_MAGIC)

@@ -3,8 +3,12 @@ from pprint import pprint
 
 from unit_extractor import UnitExtractor
 
-
 extractor = UnitExtractor()
+# matn = " بنابراین روتور سه درجه آزادی چرخش دارد و محورش هم دو درجه دارد."
+# results = extractor.run(matn)
+# pprint(results)
+# print()
+
 # matn = "دیروز با مهدی رفتم ۲ متر کالباس خریدم و با هم با سرعت ۲۵ متر بر ثانیه دویدیم"
 # results = extractor.run(matn)
 # pprint(results)
