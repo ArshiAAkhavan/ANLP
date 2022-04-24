@@ -1,6 +1,8 @@
 import re
 from typing import List, Set
 import warnings
+from hazm import Normalizer
+import codecs
 
 import pandas as pd
 from parsi_io.modules.number_extractor import NumberExtractor
@@ -13,6 +15,7 @@ from unit_extractor.consts import (
     QUANTIFIER_TRASH_MAGIC,
     UNIT_GROUP_NAME,
     UNIT_TRASH_MAGIC,
+    STOP_TRASH_MAGIC,
     pattern_regex,
     unit_overlap_regex,
 )
@@ -37,8 +40,11 @@ class UnitExtractor:
         quantifiers.sort(key=len, reverse=True)
         self.quantifier_regex = re.compile(f'({"|".join(quantifiers)})')
 
-        adverbs = ["زیاد", "کم"]
+        adverbs = ["بیسار سنگین","بسیار سبک","بسیار کم","بسیار زیاد","زیادی","کمی","بسیار","سبک","سنگین","زیاد", "کم"]
         self.adverb_regex = re.compile(f'({"|".join(adverbs)})')
+
+        self.stopwords=[Normalizer().normalize(x.strip()) for x in codecs.open('stopwords.txt','r','utf-8').readlines()]
+        self.stopword_regex = re.compile(f'({"|".join(self.stopwords)})')
 
     def _tag_numbers(self, matn: str) -> str:
         try:
@@ -68,6 +74,15 @@ class UnitExtractor:
 
     def _tag_adverb(self, matn: str) -> str:
         return self._tag_by_name(matn, self.adverb_regex, ADVERB_TRASH_MAGIC)
+    
+    def _tag_stopwords(self, matn: str) -> str:
+        matn_splited=matn.split()
+        for i,word in enumerate(matn_splited):
+            if word in self.stopwords:
+                matn_splited[i]=STOP_TRASH_MAGIC*len(word)
+        return " ".join(matn_splited)
+        
+        # return self._tag_by_name(matn, self.stopword_regex, STOP_TRASH_MAGIC)
 
     def _tag_units(self, matn: str) -> str:
         matn = self._tag_by_name(matn, self.unit_regex, UNIT_TRASH_MAGIC)
@@ -81,7 +96,7 @@ class UnitExtractor:
         return matn
 
     def _extract_patterns(self, matn: str) -> List[RawOutput]:
-        results = set()
+        results_unchecked = set()
         for regex in pattern_regex:
             for match in regex.finditer(matn):
                 try:
@@ -109,7 +124,19 @@ class UnitExtractor:
                 res = RawOutput(
                     amount=amount, unit=unit, item=item, span=span, quan=quan
                 )
-                results.add(res)
+                results_unchecked.add(res)
+        
+        results=[]
+        for target in results_unchecked:
+            flag=1
+            for res in results_unchecked:
+                if res==target:
+                    continue
+                if res.span[0]<=target.span[0] and target.span[1]<=res.span[1]:
+                   flag=0
+                   break 
+            if flag:
+                results.append(target)
         return results
 
     def _generate_outputs(
@@ -163,6 +190,7 @@ class UnitExtractor:
         m2 = self._tag_units(m1)
         m3 = self._tag_quantifier(m2)
         m4 = self._tag_adverb(m3)
-        raw_outputs = self._extract_patterns(m4)
+        m5 = self._tag_stopwords(m4)
+        raw_outputs = self._extract_patterns(m5)
         valid_outputs = self._generate_outputs(matn, raw_outputs)
         return valid_outputs

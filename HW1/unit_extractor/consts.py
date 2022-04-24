@@ -4,6 +4,7 @@ NUMBER_TRASH_MAGIC = "⌠"
 UNIT_TRASH_MAGIC = "⌡"
 QUANTIFIER_TRASH_MAGIC = "Ж"
 ADVERB_TRASH_MAGIC = "Д"
+STOP_TRASH_MAGIC = "И"
 
 
 NUMBER_GROUP_NAME = "number"
@@ -18,6 +19,8 @@ unit_regex = f"(?P<{UNIT_GROUP_NAME}>{UNIT_TRASH_MAGIC}+)"
 item_regex = f"(?P<{ITEM_GROUP_NAME}>[\u0600-\u06ff]+)"
 quantity_regex = f"(?P<{QUANTIFIER_GROUP_NAME}>{QUANTIFIER_TRASH_MAGIC}+)"
 adverb_regex = f"(?P<{ADVERB_GROUP_NAME}>{ADVERB_TRASH_MAGIC}+)"
+stopword_regex = f"({STOP_TRASH_MAGIC}+)"
+stopword_optional_regex = f"({STOP_TRASH_MAGIC}*)"
 white_space_regex = r"(\s+)"
 
 
@@ -28,10 +31,13 @@ pattern_map = {
     " ": white_space_regex,
     "Q": quantity_regex,
     "A": adverb_regex,
+    "S": stopword_regex,
+    "s": stopword_optional_regex,
 }
 
 patterns_raw = [
     "N U I",
+    "I s Q N U",
     "Q N U",
     "Q A",
 ]
