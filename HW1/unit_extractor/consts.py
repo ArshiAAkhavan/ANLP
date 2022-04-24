@@ -13,6 +13,7 @@ ITEM_GROUP_NAME = "item"
 ADVERB_GROUP_NAME = "adverb"
 QUANTIFIER_GROUP_NAME = "quantifier"
 
+WORD_SURROUNDING_REGEX = r'(?!\u200c)(?:\W|^|$)'
 
 num_regex = f"(?P<{NUMBER_GROUP_NAME}>{NUMBER_TRASH_MAGIC}+)"
 unit_regex = f"(?P<{UNIT_GROUP_NAME}>{UNIT_TRASH_MAGIC}+)"
