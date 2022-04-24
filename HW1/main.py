@@ -6,8 +6,12 @@ from HW1.unit_extractor.output import ValidOutput
 from unit_extractor.extractor import UnitExtractor
 
 
-
 extractor = UnitExtractor()
+# matn = " بنابراین روتور سه درجه آزادی چرخش دارد و محورش هم دو درجه دارد."
+# results = extractor.run(matn)
+# pprint(results)
+# print()
+
 # matn = "دیروز با مهدی رفتم ۲ متر کالباس خریدم و با هم با سرعت ۲۵ متر بر ثانیه دویدیم"
 # results = extractor.run(matn)
 # pprint(results)
@@ -19,10 +23,21 @@ extractor = UnitExtractor()
 # pprint(results)
 # print()
 
-# matn = "شهاب سنگی به جرم ۱۰ کیلوگرم به زمین برخورد کرد"
-# results = extractor.run(matn)
-# pprint(results)
-# print()
+matn = "شهاب سنگی به جرم ۱۰ کیلوگرم به زمین برخورد کرد"
+results = extractor.run(matn)
+pprint(results)
+print()
+
+matn = "شهاب سنگی به تندی ۱۰ کیلوگرم به زمین برخورد کرد"
+results = extractor.run(matn)
+pprint(results)
+print()
+
+
+matn = "شهاب سنگی به تندی ۱۰ کیلومتر بر ثانیه به زمین برخورد کرد"
+results = extractor.run(matn)
+pprint(results)
+print()
 
 # matn = "یک خودرو با سرعت زیاد از ما سبقت گرفت"
 # results = extractor.run(matn)

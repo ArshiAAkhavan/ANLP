@@ -17,10 +17,10 @@ from unit_extractor.consts import (
     UNIT_GROUP_NAME,
     UNIT_TRASH_MAGIC,
     STOP_TRASH_MAGIC,
+    WORD_SURROUNDING_REGEX,
     pattern_regex,
     unit_overlap_regex,
 )
-
 from unit_extractor.output import RawOutput, ValidOutput
 from unit_retriever import UnitPatternEscaper
 
@@ -36,18 +36,16 @@ class UnitExtractor:
 
         unit_names = self.uname_df['name'].tolist()
         unit_names.sort(key=lambda x: len(self.unit_pattern_escaper(x)), reverse=True)
-        self.unit_regex = re.compile(f'({"|".join(unit_names)})')
+        self.unit_regex = re.compile(f'{WORD_SURROUNDING_REGEX}({"|".join(unit_names)}){WORD_SURROUNDING_REGEX}')
 
         quantifiers = self.q_df['name'].tolist()
         quantifiers.sort(key=len, reverse=True)
-        self.quantifier_regex = re.compile(f'({"|".join(quantifiers)})')
+        self.quantifier_regex = re.compile(f'{WORD_SURROUNDING_REGEX}({"|".join(quantifiers)}){WORD_SURROUNDING_REGEX}')
 
-        adverbs = ["بیسار سنگین", "بسیار سبک", "بسیار کم", "بسیار زیاد", "زیادی", "کمی", "بسیار", "سبک", "سنگین",
-                   "زیاد", "کم"]
+        adverbs = ["بسیار سنگین","بسیار سبک","بسیار کم","بسیار زیاد","زیادی","کمی","بسیار","سبک","سنگین","زیاد", "کم"]
         self.adverb_regex = re.compile(f'({"|".join(adverbs)})')
 
-        self.stopwords = [Normalizer().normalize(x.strip()) for x in
-                          codecs.open('stopwords.txt', 'r', 'utf-8').readlines()]
+        self.stopwords=[Normalizer().normalize(x.strip()) for x in codecs.open('stopwords.txt','r','utf-8').readlines()]
         self.stopword_regex = re.compile(f'({"|".join(self.stopwords)})')
 
     def _tag_numbers(self, matn: str) -> str:
@@ -64,9 +62,9 @@ class UnitExtractor:
         return matn
 
     @staticmethod
-    def _tag_by_name(matn: str, regex, tag: str) -> str:
+    def _tag_by_name(matn: str, regex: re.Pattern, tag: str) -> str:
         for match in regex.finditer(matn):
-            span = match.span()
+            span = match.span(1)
             start = span[0]
             end = span[1]
             length = end - start
@@ -78,15 +76,13 @@ class UnitExtractor:
 
     def _tag_adverb(self, matn: str) -> str:
         return self._tag_by_name(matn, self.adverb_regex, ADVERB_TRASH_MAGIC)
-
+    
     def _tag_stopwords(self, matn: str) -> str:
-        matn_splited = matn.split()
-        for i, word in enumerate(matn_splited):
+        matn_splited=matn.split(" ")
+        for i,word in enumerate(matn_splited):
             if word in self.stopwords:
-                matn_splited[i] = STOP_TRASH_MAGIC * len(word)
+                matn_splited[i]=STOP_TRASH_MAGIC*len(word)
         return " ".join(matn_splited)
-
-        # return self._tag_by_name(matn, self.stopword_regex, STOP_TRASH_MAGIC)
 
     def _tag_units(self, matn: str) -> str:
         matn = self._tag_by_name(matn, self.unit_regex, UNIT_TRASH_MAGIC)
@@ -129,39 +125,40 @@ class UnitExtractor:
                     amount=amount, unit=unit, item=item, span=span, quan=quan
                 )
                 results_unchecked.add(res)
-
-        results = []
+        
+        results=[]
         for target in results_unchecked:
-            flag = 1
+            flag=1
             for res in results_unchecked:
-                if res == target:
+                if res==target:
                     continue
-                if res.span[0] <= target.span[0] and target.span[1] <= res.span[1]:
-                    flag = 0
-                    break
+                if res.span[0]<=target.span[0] and target.span[1]<=res.span[1]:
+                   flag=0
+                   break 
             if flag:
                 results.append(target)
         return results
 
     def _generate_outputs(
-            self, matn: str, raw_outputs: Set[RawOutput]
+        self, matn: str, raw_outputs: Set[RawOutput]
     ) -> List[ValidOutput]:
         results = []
         for raw in raw_outputs:
-            unit = matn[raw.unit[0]: raw.unit[1]] if raw.unit else ""
-            quan = matn[raw.quan[0]: raw.quan[1]] if raw.quan else ""
-            item = matn[raw.item[0]: raw.item[1]] if raw.item else ""
-            marker = matn[raw.span[0]: raw.span[1]]
+            unit = matn[raw.unit[0] : raw.unit[1]] if raw.unit else ""
+            quan = matn[raw.quan[0] : raw.quan[1]] if raw.quan else ""
+            item = matn[raw.item[0] : raw.item[1]] if raw.item else ""
+            marker = matn[raw.span[0] : raw.span[1]]
 
             try:
                 if raw.amount:
-                    amount_raw = matn[raw.amount[0]: raw.amount[1]]
+                    amount_raw = matn[raw.amount[0] : raw.amount[1]]
                     amount = self.num_extractor.run(amount_raw)[0]["value"]
                 else:
                     amount = ""
             except:
                 logging.warning(f"couldn't convert {amount_raw}...")
                 continue
+                
 
             quantity = self.get_quantity_from_unit(unit)
             if not quantity or len(quantity) == 0:
@@ -178,31 +175,27 @@ class UnitExtractor:
             results.append(o)
         return results
 
-    def get_quantity_and_proper_unit_from_unit_name(self, unit_name: str) -> Tuple[str, str, str]:
+    def get_quantity_from_unit(self, unit_name: str) -> str:
         if not unit_name:
-            return '', '', ''
+            return ''
 
-        uid = self.uname_df[self.uname_df['name'].apply(lambda regex: re.match(rf'^{regex}$', unit_name) is not None)][
-            'uid'].tolist()
+        uid = self.uname_df[self.uname_df['name'].apply(lambda regex: re.match(rf'^{regex}$', unit_name) is not None)]['uid'].tolist()
         if not uid:
             warnings.warn(f'Unit name "{unit_name}" not found in unit_names.csv')
-            return '', '', ''
+            return ''
 
         uid = uid[0]
         qid = self.u_df[self.u_df['id'] == uid]['qid'].tolist()
         qid = qid[0]
         qnames = self.q_df[self.q_df['id'] == qid]['name'].tolist()
-        return qnames[0], qid, uid
-
-    def get_quantity_from_unit(self, unit_name: str) -> str:
-        return self.get_quantity_and_proper_unit_from_unit_name(unit_name)[0]
+        return qnames[0]
 
     def run(self, matn: str) -> List[ValidOutput]:
         m1 = self._tag_numbers(matn)
         m2 = self._tag_units(m1)
         m3 = self._tag_quantifier(m2)
         m4 = self._tag_adverb(m3)
-        # m5 = self._tag_stopwords(m4)
-        raw_outputs = self._extract_patterns(m4)
+        m5 = self._tag_stopwords(m4)
+        raw_outputs = self._extract_patterns(m5)
         valid_outputs = self._generate_outputs(matn, raw_outputs)
         return valid_outputs
