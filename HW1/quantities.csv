@@ -3,6 +3,7 @@ length,طول
 length,Length
 Weight,وزن
 Weight,Weight
+Weight,جرم
 pressure,فشار
 pressure,Pressure
 volume,حجم
@@ -13,6 +14,7 @@ area,مساحت
 area,Area
 speed,سرعت
 speed,Speed
+speed,تندی
 force,نیرو
 force,Force
 energy,انرژی

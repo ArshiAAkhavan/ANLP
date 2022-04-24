@@ -72,6 +72,10 @@ class UnitRetriever:
         result = [first] + others
         if 'سانتیگراد' in result:
             result.append('درجهسانتیگراد')
+        if 'سرعت' in result:
+            result.append('تندی')
+        if 'وزن' in result:
+            result.append('جرم')
         return result
 
     def __get_quantities(self) -> List[Quantity]:
